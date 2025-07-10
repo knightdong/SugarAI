@@ -774,9 +774,11 @@
         .result-content {
             background: linear-gradient(145deg, #2a2a2a, #1e1e1e);
             border-radius: 20px;
-            padding: 40px;
-            max-width: 600px;
+            padding: 30px;
+            max-width: 500px;
             width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
             text-align: center;
             border: 1px solid #333;
             position: relative;
@@ -791,10 +793,14 @@
 
         .result-image {
             width: 100%;
-            max-width: 400px;
+            max-width: 300px;
+            height: auto;
+            max-height: 400px;
+            object-fit: cover;
             border-radius: 16px;
-            margin: 20px auto;
+            margin: 15px auto;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            display: block;
         }
 
         .result-character-name {
@@ -856,6 +862,70 @@
 
         .result-close:hover {
             color: #ed7f8c;
+        }
+
+        /* 响应式设计 - 结果模态框 */
+        @media (max-width: 768px) {
+            .result-content {
+                padding: 20px;
+                max-width: 95%;
+                max-height: 95vh;
+            }
+            
+            .result-image {
+                max-width: 250px;
+                max-height: 300px;
+                margin: 10px auto;
+            }
+            
+            .result-title {
+                font-size: 24px;
+            }
+            
+            .result-character-name {
+                font-size: 20px;
+            }
+            
+            .result-description {
+                font-size: 14px;
+            }
+            
+            .result-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .result-btn {
+                width: 100%;
+                padding: 15px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .result-content {
+                padding: 15px;
+                max-width: 98%;
+            }
+            
+            .result-image {
+                max-width: 200px;
+                max-height: 250px;
+            }
+            
+            .result-title {
+                font-size: 20px;
+                margin-bottom: 15px;
+            }
+            
+            .result-character-name {
+                font-size: 18px;
+                margin: 15px 0 8px;
+            }
+            
+            .result-description {
+                font-size: 13px;
+                margin-bottom: 20px;
+            }
         }
 
         /* 响应式设计 */
@@ -1684,10 +1754,6 @@
                     <div class="loading-spinner"></div>
                     <span class="btn-text">Create Character</span>
                 </button>
-                
-                <button style="width: 100%; margin-top: 15px; padding: 12px; background: rgba(237, 127, 140, 0.1); border: 2px solid rgba(237, 127, 140, 0.3); color: #ed7f8c; border-radius: 12px; cursor: pointer; font-size: 14px;" onclick="testRandomImage()">
-                    🖼️ Test Random Image Preview
-                </button>
             `;
         }
 
@@ -1933,7 +1999,7 @@
                 } else {
                     // 如果连备用图片都加载失败，显示占位符
                     this.style.display = 'none';
-                    this.parentElement.innerHTML += '<div style="width: 400px; height: 400px; background: linear-gradient(135deg, #333, #555); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: #ed7f8c; font-size: 48px;">👤</div>';
+                    this.parentElement.innerHTML += '<div style="width: 100%; max-width: 300px; height: 300px; background: linear-gradient(135deg, #333, #555); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: #ed7f8c; font-size: 48px; margin: 15px auto;">👤</div>';
                 }
             };
             
@@ -1976,33 +2042,7 @@
             loadStep(1);
         }
 
-        // 测试随机图片预览功能
-        function testRandomImage() {
-            const characterImages = [
-                'assets/pic_1.jpeg',
-                'assets/pic_2.jpeg', 
-                'assets/pic_3.jpg',
-                'assets/pic_4.jpg',
-                'assets/pic_5.jpg',
-                'assets/pic_6.jpg',
-                'assets/pic_7.jpeg',
-                'assets/pic_8.jpg',
-                'assets/pic_9.jpg',
-                'assets/pic_10.jpeg'
-            ];
-            
-            const randomImage = characterImages[Math.floor(Math.random() * characterImages.length)];
-            
-            // 创建测试结果数据
-            const testResultData = {
-                image: randomImage,
-                name: "Test Character",
-                description: `This is a test preview using image: ${randomImage}. If you can see this image, the character generation will work correctly!`
-            };
-            
-            // 显示测试结果
-            showResult(testResultData);
-        }
+
 
         // 检查图片是否能正确加载
         function checkImageLoad(ethnicityId, imageUrl) {
