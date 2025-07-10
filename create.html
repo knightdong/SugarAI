@@ -1684,6 +1684,10 @@
                     <div class="loading-spinner"></div>
                     <span class="btn-text">Create Character</span>
                 </button>
+                
+                <button style="width: 100%; margin-top: 15px; padding: 12px; background: rgba(237, 127, 140, 0.1); border: 2px solid rgba(237, 127, 140, 0.3); color: #ed7f8c; border-radius: 12px; cursor: pointer; font-size: 14px;" onclick="testRandomImage()">
+                    🖼️ Test Random Image Preview
+                </button>
             `;
         }
 
@@ -1858,17 +1862,17 @@
 
         // 生成角色结果（随机选择图片和生成描述）
         function generateCharacterResult() {
-            // 可用的角色图片库
+            // 可用的角色图片库（使用正确的文件扩展名）
             const characterImages = [
                 'assets/pic_1.jpeg',
                 'assets/pic_2.jpeg', 
-                'assets/pic_3.jpeg',
-                'assets/pic_4.jpeg',
-                'assets/pic_5.jpeg',
-                'assets/pic_6.jpeg',
+                'assets/pic_3.jpg',
+                'assets/pic_4.jpg',
+                'assets/pic_5.jpg',
+                'assets/pic_6.jpg',
                 'assets/pic_7.jpeg',
-                'assets/pic_8.jpeg',
-                'assets/pic_9.jpeg',
+                'assets/pic_8.jpg',
+                'assets/pic_9.jpg',
                 'assets/pic_10.jpeg'
             ];
             
@@ -1913,6 +1917,26 @@
             const resultName = document.getElementById('resultCharacterName');
             const resultDescription = document.getElementById('resultDescription');
             
+            // 设置图片加载失败的回退
+            resultImage.onerror = function() {
+                console.warn('Failed to load image:', resultData.image);
+                // 尝试加载另一张图片
+                const fallbackImages = [
+                    'assets/pic_1.jpeg',
+                    'assets/pic_2.jpeg',
+                    'assets/pic_7.jpeg',
+                    'assets/pic_10.jpeg'
+                ];
+                const randomFallback = fallbackImages[Math.floor(Math.random() * fallbackImages.length)];
+                if (this.src !== randomFallback) {
+                    this.src = randomFallback;
+                } else {
+                    // 如果连备用图片都加载失败，显示占位符
+                    this.style.display = 'none';
+                    this.parentElement.innerHTML += '<div style="width: 400px; height: 400px; background: linear-gradient(135deg, #333, #555); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: #ed7f8c; font-size: 48px;">👤</div>';
+                }
+            };
+            
             resultImage.src = resultData.image;
             resultName.textContent = resultData.name;
             resultDescription.textContent = resultData.description;
@@ -1950,6 +1974,34 @@
             // 回到第一步
             currentStep = 1;
             loadStep(1);
+        }
+
+        // 测试随机图片预览功能
+        function testRandomImage() {
+            const characterImages = [
+                'assets/pic_1.jpeg',
+                'assets/pic_2.jpeg', 
+                'assets/pic_3.jpg',
+                'assets/pic_4.jpg',
+                'assets/pic_5.jpg',
+                'assets/pic_6.jpg',
+                'assets/pic_7.jpeg',
+                'assets/pic_8.jpg',
+                'assets/pic_9.jpg',
+                'assets/pic_10.jpeg'
+            ];
+            
+            const randomImage = characterImages[Math.floor(Math.random() * characterImages.length)];
+            
+            // 创建测试结果数据
+            const testResultData = {
+                image: randomImage,
+                name: "Test Character",
+                description: `This is a test preview using image: ${randomImage}. If you can see this image, the character generation will work correctly!`
+            };
+            
+            // 显示测试结果
+            showResult(testResultData);
         }
 
         // 检查图片是否能正确加载
