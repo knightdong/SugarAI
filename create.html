@@ -1239,15 +1239,15 @@
         let currentStep = 1;
         let totalSteps = 7;
         let characterData = {
-            style: '',
-            ethnicity: '',
+            style: 'realistic',           // 默认选择第一项：Realistic
+            ethnicity: 'asian',           // 默认选择第一项：Asian
             age: 22,
-            hairColor: '',
-            eyeColor: '',
-            bodyType: '',
-            personality: '',
-            relationship: '',
-            name: ''
+            hairColor: 'black',           // 默认选择第一项：Black
+            eyeColor: 'dark_brown',       // 默认选择第一项：Dark Brown
+            bodyType: 'petite',           // 默认选择第一项：Petite
+            personality: 'caregiver',     // 默认选择第一项：Caregiver
+            relationship: 'stranger',     // 默认选择第一项：Stranger
+            name: 'Luna'                  // 默认角色名
         };
 
         // 步骤配置
@@ -1855,24 +1855,20 @@
 
         // 创建角色
         function createCharacter() {
-            // 详细验证必填项并提供具体提示
-            const missingFields = [];
-            
-            if (!characterData.style) missingFields.push('Style (Step 1)');
-            if (!characterData.ethnicity) missingFields.push('Ethnicity (Step 2)');
-            if (!characterData.bodyType) missingFields.push('Body Type (Step 4)');
-            if (!characterData.personality) missingFields.push('Personality (Step 5)');
-            if (!characterData.relationship) missingFields.push('Relationship (Step 6)');
-            
-            if (missingFields.length > 0) {
-                alert(`Please complete the following required selections:\n\n${missingFields.join('\n')}\n\nUse the "Previous" and "Next" buttons to navigate through all steps.`);
-                return;
-            }
-            
+            // 所有项目都有默认值，可以直接创建
+            // 但仍然进行基本验证确保数据完整性
             if (!characterData.name || characterData.name.trim() === '') {
-                alert('Please enter a character name in Step 7.');
-                return;
+                characterData.name = 'Luna'; // 如果名字为空，使用默认名字
             }
+            
+            // 确保所有必填项都有值（理论上不应该为空，因为都有默认值）
+            if (!characterData.style) characterData.style = 'realistic';
+            if (!characterData.ethnicity) characterData.ethnicity = 'asian';
+            if (!characterData.bodyType) characterData.bodyType = 'petite';
+            if (!characterData.personality) characterData.personality = 'caregiver';
+            if (!characterData.relationship) characterData.relationship = 'stranger';
+            if (!characterData.hairColor) characterData.hairColor = 'black';
+            if (!characterData.eyeColor) characterData.eyeColor = 'dark_brown';
             
             // 开始加载状态
             startGenerating();
@@ -1947,20 +1943,33 @@
             
             // 生成角色描述
             const personalityMap = {
-                'sweet': 'Sweet and caring',
-                'playful': 'Playful and energetic',
-                'mysterious': 'Mysterious and intriguing',
-                'confident': 'Confident and bold',
-                'shy': 'Shy and gentle',
-                'adventurous': 'Adventurous and spontaneous'
+                'caregiver': 'Nurturing and caring',
+                'sage': 'Wise and thoughtful',
+                'innocent': 'Optimistic and pure',
+                'jester': 'Playful and humorous',
+                'temptress': 'Flirtatious and alluring',
+                'dominant': 'Assertive and commanding',
+                'submissive': 'Gentle and yielding',
+                'lover': 'Romantic and affectionate',
+                'nympho': 'Passionate and intense',
+                'mean': 'Cold and dismissive',
+                'confidant': 'Trustworthy and supportive',
+                'experimenter': 'Curious and adventurous'
             };
             
             const relationshipMap = {
+                'stranger': 'someone you just met',
+                'school_mate': 'your classmate and study partner',
+                'colleague': 'your work partner',
+                'mentor': 'your wise guide and teacher',
                 'girlfriend': 'your loving girlfriend',
+                'sex_friend': 'your intimate friend',
+                'wife': 'your devoted wife',
+                'mistress': 'your secret lover',
                 'friend': 'your close friend',
-                'companion': 'your loyal companion',
-                'mentor': 'your wise mentor',
-                'colleague': 'your supportive colleague'
+                'best_friend': 'your closest confidant',
+                'step_sister': 'your step sister',
+                'step_mom': 'your step mother'
             };
             
             const styleText = characterData.style === 'realistic' ? 'realistic' : 'anime-style';
@@ -2025,17 +2034,17 @@
         // 创建另一个角色
         function createAnother() {
             closeResult();
-            // 重置角色数据
+            // 重置角色数据（使用默认值）
             characterData = {
-                style: '',
-                ethnicity: '',
+                style: 'realistic',           // 默认选择第一项：Realistic
+                ethnicity: 'asian',           // 默认选择第一项：Asian
                 age: 22,
-                hairColor: '',
-                eyeColor: '',
-                bodyType: '',
-                personality: '',
-                relationship: '',
-                name: ''
+                hairColor: 'black',           // 默认选择第一项：Black
+                eyeColor: 'dark_brown',       // 默认选择第一项：Dark Brown
+                bodyType: 'petite',           // 默认选择第一项：Petite
+                personality: 'caregiver',     // 默认选择第一项：Caregiver
+                relationship: 'stranger',     // 默认选择第一项：Stranger
+                name: 'Luna'                  // 默认角色名
             };
             // 回到第一步
             currentStep = 1;
