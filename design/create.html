@@ -663,8 +663,8 @@
         /* 总结页面 */
         .summary-container {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
             margin: 30px 0;
         }
 
@@ -717,11 +717,215 @@
             font-weight: 700;
             transition: all 0.3s ease;
             margin-top: 30px;
+            position: relative;
+            overflow: hidden;
         }
 
         .btn-create:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(237, 127, 140, 0.4);
+        }
+
+        .btn-create:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn-create .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        .btn-create.loading .loading-spinner {
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* 结果展示模态框 */
+        .result-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .result-modal.active {
+            display: flex;
+        }
+
+        .result-content {
+            background: linear-gradient(145deg, #2a2a2a, #1e1e1e);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            text-align: center;
+            border: 1px solid #333;
+            position: relative;
+        }
+
+        .result-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ed7f8c;
+            margin-bottom: 20px;
+        }
+
+        .result-image {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 16px;
+            margin: 15px auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            display: block;
+        }
+
+        .result-character-name {
+            font-size: 24px;
+            font-weight: 600;
+            color: #ffffff;
+            margin: 20px 0 10px;
+        }
+
+        .result-description {
+            color: #999;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .result-btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .result-btn.primary {
+            background: linear-gradient(135deg, #ed7f8c, #d16570);
+            color: white;
+        }
+
+        .result-btn.secondary {
+            background: rgba(237, 127, 140, 0.1);
+            border: 2px solid rgba(237, 127, 140, 0.3);
+            color: #ed7f8c;
+        }
+
+        .result-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .result-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #999;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .result-close:hover {
+            color: #ed7f8c;
+        }
+
+        /* 响应式设计 - 结果模态框 */
+        @media (max-width: 768px) {
+            .result-content {
+                padding: 20px;
+                max-width: 95%;
+                max-height: 95vh;
+            }
+            
+            .result-image {
+                max-width: 250px;
+                max-height: 300px;
+                margin: 10px auto;
+            }
+            
+            .result-title {
+                font-size: 24px;
+            }
+            
+            .result-character-name {
+                font-size: 20px;
+            }
+            
+            .result-description {
+                font-size: 14px;
+            }
+            
+            .result-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .result-btn {
+                width: 100%;
+                padding: 15px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .result-content {
+                padding: 15px;
+                max-width: 98%;
+            }
+            
+            .result-image {
+                max-width: 200px;
+                max-height: 250px;
+            }
+            
+            .result-title {
+                font-size: 20px;
+                margin-bottom: 15px;
+            }
+            
+            .result-character-name {
+                font-size: 18px;
+                margin: 15px 0 8px;
+            }
+            
+            .result-description {
+                font-size: 13px;
+                margin-bottom: 20px;
+            }
         }
 
         /* 响应式设计 */
@@ -747,7 +951,7 @@
             
             .summary-container {
                 grid-template-columns: 1fr;
-                gap: 20px;
+                gap: 15px;
             }
         }
 
@@ -965,6 +1169,21 @@
         </div>
     </div>
 
+    <!-- 结果展示模态框 -->
+    <div class="result-modal" id="resultModal">
+        <div class="result-content">
+            <button class="result-close" onclick="closeResult()">×</button>
+            <div class="result-title">Character Created Successfully!</div>
+            <img class="result-image" id="resultImage" src="" alt="Generated Character">
+            <div class="result-character-name" id="resultCharacterName"></div>
+            <div class="result-description" id="resultDescription"></div>
+            <div class="result-actions">
+                <button class="result-btn primary" onclick="chatWithCharacter()">Start Chatting</button>
+                <button class="result-btn secondary" onclick="createAnother()">Create Another</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // User authentication state management
         let isLoggedIn = false;
@@ -1020,15 +1239,15 @@
         let currentStep = 1;
         let totalSteps = 7;
         let characterData = {
-            style: '',
-            ethnicity: '',
+            style: 'realistic',           // 默认选择第一项：Realistic
+            ethnicity: 'asian',           // 默认选择第一项：Asian
             age: 22,
-            hairColor: '',
-            eyeColor: '',
-            bodyType: '',
-            personality: '',
-            relationship: '',
-            name: ''
+            hairColor: 'black',           // 默认选择第一项：Black
+            eyeColor: 'dark_brown',       // 默认选择第一项：Dark Brown
+            bodyType: 'petite',           // 默认选择第一项：Petite
+            personality: 'caregiver',     // 默认选择第一项：Caregiver
+            relationship: 'stranger',     // 默认选择第一项：Stranger
+            name: 'Luna'                  // 默认角色名
         };
 
         // 步骤配置
@@ -1492,6 +1711,38 @@
                     </div>
                     
                     <div class="summary-section">
+                        <div class="summary-title">Selection Status</div>
+                        <div class="summary-item">
+                            <span class="summary-label">Style:</span>
+                            <span class="summary-value" style="color: ${characterData.style ? '#4CAF50' : '#ed7f8c'}">${characterData.style ? '✓ Selected' : '✗ Required'}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Ethnicity:</span>
+                            <span class="summary-value" style="color: ${characterData.ethnicity ? '#4CAF50' : '#ed7f8c'}">${characterData.ethnicity ? '✓ Selected' : '✗ Required'}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Hair Color:</span>
+                            <span class="summary-value" style="color: ${characterData.hairColor ? '#4CAF50' : '#999'}">${characterData.hairColor ? '✓ Selected' : 'Optional'}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Eye Color:</span>
+                            <span class="summary-value" style="color: ${characterData.eyeColor ? '#4CAF50' : '#999'}">${characterData.eyeColor ? '✓ Selected' : 'Optional'}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Body Type:</span>
+                            <span class="summary-value" style="color: ${characterData.bodyType ? '#4CAF50' : '#ed7f8c'}">${characterData.bodyType ? '✓ Selected' : '✗ Required'}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Personality:</span>
+                            <span class="summary-value" style="color: ${characterData.personality ? '#4CAF50' : '#ed7f8c'}">${characterData.personality ? '✓ Selected' : '✗ Required'}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Relationship:</span>
+                            <span class="summary-value" style="color: ${characterData.relationship ? '#4CAF50' : '#ed7f8c'}">${characterData.relationship ? '✓ Selected' : '✗ Required'}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-section">
                         <div class="summary-title">Character Name</div>
                         <input type="text" class="age-input" id="characterName" value="${characterData.name}" 
                                placeholder="Enter character name..." onchange="updateCharacterName()" 
@@ -1499,7 +1750,10 @@
                     </div>
                 </div>
                 
-                <button class="btn-create" onclick="createCharacter()">Create Character</button>
+                <button class="btn-create" id="createBtn" onclick="createCharacter()">
+                    <div class="loading-spinner"></div>
+                    <span class="btn-text">Create Character</span>
+                </button>
             `;
         }
 
@@ -1601,16 +1855,52 @@
 
         // 创建角色
         function createCharacter() {
-            // 验证必填项
-            if (!characterData.style || !characterData.ethnicity || !characterData.bodyType || !characterData.personality || !characterData.relationship) {
-                alert('Please complete all required selections before creating your character.');
-                return;
+            // 所有项目都有默认值，可以直接创建
+            // 但仍然进行基本验证确保数据完整性
+            if (!characterData.name || characterData.name.trim() === '') {
+                characterData.name = 'Luna'; // 如果名字为空，使用默认名字
             }
             
-            if (!characterData.name) {
-                alert('Please enter a character name.');
-                return;
-            }
+            // 确保所有必填项都有值（理论上不应该为空，因为都有默认值）
+            if (!characterData.style) characterData.style = 'realistic';
+            if (!characterData.ethnicity) characterData.ethnicity = 'asian';
+            if (!characterData.bodyType) characterData.bodyType = 'petite';
+            if (!characterData.personality) characterData.personality = 'caregiver';
+            if (!characterData.relationship) characterData.relationship = 'stranger';
+            if (!characterData.hairColor) characterData.hairColor = 'black';
+            if (!characterData.eyeColor) characterData.eyeColor = 'dark_brown';
+            
+            // 开始加载状态
+            startGenerating();
+            
+            // 模拟AI生成过程（3-5秒）
+            const generationTime = 3000 + Math.random() * 2000; // 3-5秒
+            
+            setTimeout(() => {
+                // 生成角色完成
+                completeGeneration();
+            }, generationTime);
+        }
+
+        // 开始生成状态
+        function startGenerating() {
+            const btn = document.getElementById('createBtn');
+            const btnText = btn.querySelector('.btn-text');
+            
+            btn.disabled = true;
+            btn.classList.add('loading');
+            btnText.textContent = 'Generating your character...';
+        }
+
+        // 完成生成
+        function completeGeneration() {
+            const btn = document.getElementById('createBtn');
+            const btnText = btn.querySelector('.btn-text');
+            
+            // 重置按钮状态
+            btn.disabled = false;
+            btn.classList.remove('loading');
+            btnText.textContent = 'Create Character';
             
             // 生成随机ID
             const characterId = 'character_' + Date.now();
@@ -1625,12 +1915,143 @@
             // 保存到本地存储
             localStorage.setItem('newCharacter', JSON.stringify(fullCharacterData));
             
-            // 显示成功消息
-            alert('Character created successfully!');
+            // 生成结果图片和描述
+            const resultData = generateCharacterResult();
             
-            // 跳转到聊天页面
+            // 显示结果模态框
+            showResult(resultData);
+        }
+
+        // 生成角色结果（随机选择图片和生成描述）
+        function generateCharacterResult() {
+            // 可用的角色图片库（使用正确的文件扩展名）
+            const characterImages = [
+                'assets/pic_1.jpeg',
+                'assets/pic_2.jpeg', 
+                'assets/pic_3.jpg',
+                'assets/pic_4.jpg',
+                'assets/pic_5.jpg',
+                'assets/pic_6.jpg',
+                'assets/pic_7.jpeg',
+                'assets/pic_8.jpg',
+                'assets/pic_9.jpg',
+                'assets/pic_10.jpeg'
+            ];
+            
+            // 随机选择一张图片
+            const randomImage = characterImages[Math.floor(Math.random() * characterImages.length)];
+            
+            // 生成角色描述
+            const personalityMap = {
+                'caregiver': 'Nurturing and caring',
+                'sage': 'Wise and thoughtful',
+                'innocent': 'Optimistic and pure',
+                'jester': 'Playful and humorous',
+                'temptress': 'Flirtatious and alluring',
+                'dominant': 'Assertive and commanding',
+                'submissive': 'Gentle and yielding',
+                'lover': 'Romantic and affectionate',
+                'nympho': 'Passionate and intense',
+                'mean': 'Cold and dismissive',
+                'confidant': 'Trustworthy and supportive',
+                'experimenter': 'Curious and adventurous'
+            };
+            
+            const relationshipMap = {
+                'stranger': 'someone you just met',
+                'school_mate': 'your classmate and study partner',
+                'colleague': 'your work partner',
+                'mentor': 'your wise guide and teacher',
+                'girlfriend': 'your loving girlfriend',
+                'sex_friend': 'your intimate friend',
+                'wife': 'your devoted wife',
+                'mistress': 'your secret lover',
+                'friend': 'your close friend',
+                'best_friend': 'your closest confidant',
+                'step_sister': 'your step sister',
+                'step_mom': 'your step mother'
+            };
+            
+            const styleText = characterData.style === 'realistic' ? 'realistic' : 'anime-style';
+            const personalityText = personalityMap[characterData.personality] || characterData.personality;
+            const relationshipText = relationshipMap[characterData.relationship] || characterData.relationship;
+            
+            const description = `Meet ${characterData.name}, your new ${styleText} AI companion! She's a ${characterData.age}-year-old ${personalityText} character who will be ${relationshipText}. Her ${characterData.hairColor} hair and ${characterData.eyeColor} eyes perfectly complement her ${characterData.bodyType} figure.`;
+            
+            return {
+                image: randomImage,
+                name: characterData.name,
+                description: description
+            };
+        }
+
+        // 显示结果模态框
+        function showResult(resultData) {
+            const modal = document.getElementById('resultModal');
+            const resultImage = document.getElementById('resultImage');
+            const resultName = document.getElementById('resultCharacterName');
+            const resultDescription = document.getElementById('resultDescription');
+            
+            // 设置图片加载失败的回退
+            resultImage.onerror = function() {
+                console.warn('Failed to load image:', resultData.image);
+                // 尝试加载另一张图片
+                const fallbackImages = [
+                    'assets/pic_1.jpeg',
+                    'assets/pic_2.jpeg',
+                    'assets/pic_7.jpeg',
+                    'assets/pic_10.jpeg'
+                ];
+                const randomFallback = fallbackImages[Math.floor(Math.random() * fallbackImages.length)];
+                if (this.src !== randomFallback) {
+                    this.src = randomFallback;
+                } else {
+                    // 如果连备用图片都加载失败，显示占位符
+                    this.style.display = 'none';
+                    this.parentElement.innerHTML += '<div style="width: 100%; max-width: 300px; height: 300px; background: linear-gradient(135deg, #333, #555); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: #ed7f8c; font-size: 48px; margin: 15px auto;">👤</div>';
+                }
+            };
+            
+            resultImage.src = resultData.image;
+            resultName.textContent = resultData.name;
+            resultDescription.textContent = resultData.description;
+            
+            modal.classList.add('active');
+        }
+
+        // 关闭结果模态框
+        function closeResult() {
+            const modal = document.getElementById('resultModal');
+            modal.classList.remove('active');
+        }
+
+        // 开始聊天
+        function chatWithCharacter() {
+            closeResult();
             window.location.href = `chat.html?character=${encodeURIComponent(characterData.name)}`;
         }
+
+        // 创建另一个角色
+        function createAnother() {
+            closeResult();
+            // 重置角色数据（使用默认值）
+            characterData = {
+                style: 'realistic',           // 默认选择第一项：Realistic
+                ethnicity: 'asian',           // 默认选择第一项：Asian
+                age: 22,
+                hairColor: 'black',           // 默认选择第一项：Black
+                eyeColor: 'dark_brown',       // 默认选择第一项：Dark Brown
+                bodyType: 'petite',           // 默认选择第一项：Petite
+                personality: 'caregiver',     // 默认选择第一项：Caregiver
+                relationship: 'stranger',     // 默认选择第一项：Stranger
+                name: 'Luna'                  // 默认角色名
+            };
+            // 回到第一步
+            currentStep = 1;
+            loadStep(1);
+        }
+
+
 
         // 检查图片是否能正确加载
         function checkImageLoad(ethnicityId, imageUrl) {
