@@ -663,8 +663,8 @@
         /* 总结页面 */
         .summary-container {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
             margin: 30px 0;
         }
 
@@ -881,7 +881,7 @@
             
             .summary-container {
                 grid-template-columns: 1fr;
-                gap: 20px;
+                gap: 15px;
             }
         }
 
@@ -1641,6 +1641,38 @@
                     </div>
                     
                     <div class="summary-section">
+                        <div class="summary-title">Selection Status</div>
+                        <div class="summary-item">
+                            <span class="summary-label">Style:</span>
+                            <span class="summary-value" style="color: ${characterData.style ? '#4CAF50' : '#ed7f8c'}">${characterData.style ? '✓ Selected' : '✗ Required'}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Ethnicity:</span>
+                            <span class="summary-value" style="color: ${characterData.ethnicity ? '#4CAF50' : '#ed7f8c'}">${characterData.ethnicity ? '✓ Selected' : '✗ Required'}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Hair Color:</span>
+                            <span class="summary-value" style="color: ${characterData.hairColor ? '#4CAF50' : '#999'}">${characterData.hairColor ? '✓ Selected' : 'Optional'}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Eye Color:</span>
+                            <span class="summary-value" style="color: ${characterData.eyeColor ? '#4CAF50' : '#999'}">${characterData.eyeColor ? '✓ Selected' : 'Optional'}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Body Type:</span>
+                            <span class="summary-value" style="color: ${characterData.bodyType ? '#4CAF50' : '#ed7f8c'}">${characterData.bodyType ? '✓ Selected' : '✗ Required'}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Personality:</span>
+                            <span class="summary-value" style="color: ${characterData.personality ? '#4CAF50' : '#ed7f8c'}">${characterData.personality ? '✓ Selected' : '✗ Required'}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Relationship:</span>
+                            <span class="summary-value" style="color: ${characterData.relationship ? '#4CAF50' : '#ed7f8c'}">${characterData.relationship ? '✓ Selected' : '✗ Required'}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-section">
                         <div class="summary-title">Character Name</div>
                         <input type="text" class="age-input" id="characterName" value="${characterData.name}" 
                                placeholder="Enter character name..." onchange="updateCharacterName()" 
@@ -1753,14 +1785,22 @@
 
         // 创建角色
         function createCharacter() {
-            // 验证必填项
-            if (!characterData.style || !characterData.ethnicity || !characterData.bodyType || !characterData.personality || !characterData.relationship) {
-                alert('Please complete all required selections before creating your character.');
+            // 详细验证必填项并提供具体提示
+            const missingFields = [];
+            
+            if (!characterData.style) missingFields.push('Style (Step 1)');
+            if (!characterData.ethnicity) missingFields.push('Ethnicity (Step 2)');
+            if (!characterData.bodyType) missingFields.push('Body Type (Step 4)');
+            if (!characterData.personality) missingFields.push('Personality (Step 5)');
+            if (!characterData.relationship) missingFields.push('Relationship (Step 6)');
+            
+            if (missingFields.length > 0) {
+                alert(`Please complete the following required selections:\n\n${missingFields.join('\n')}\n\nUse the "Previous" and "Next" buttons to navigate through all steps.`);
                 return;
             }
             
-            if (!characterData.name) {
-                alert('Please enter a character name.');
+            if (!characterData.name || characterData.name.trim() === '') {
+                alert('Please enter a character name in Step 7.');
                 return;
             }
             
