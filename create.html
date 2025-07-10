@@ -717,11 +717,145 @@
             font-weight: 700;
             transition: all 0.3s ease;
             margin-top: 30px;
+            position: relative;
+            overflow: hidden;
         }
 
         .btn-create:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(237, 127, 140, 0.4);
+        }
+
+        .btn-create:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn-create .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        .btn-create.loading .loading-spinner {
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* 结果展示模态框 */
+        .result-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .result-modal.active {
+            display: flex;
+        }
+
+        .result-content {
+            background: linear-gradient(145deg, #2a2a2a, #1e1e1e);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid #333;
+            position: relative;
+        }
+
+        .result-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ed7f8c;
+            margin-bottom: 20px;
+        }
+
+        .result-image {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 16px;
+            margin: 20px auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .result-character-name {
+            font-size: 24px;
+            font-weight: 600;
+            color: #ffffff;
+            margin: 20px 0 10px;
+        }
+
+        .result-description {
+            color: #999;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .result-btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .result-btn.primary {
+            background: linear-gradient(135deg, #ed7f8c, #d16570);
+            color: white;
+        }
+
+        .result-btn.secondary {
+            background: rgba(237, 127, 140, 0.1);
+            border: 2px solid rgba(237, 127, 140, 0.3);
+            color: #ed7f8c;
+        }
+
+        .result-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .result-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #999;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .result-close:hover {
+            color: #ed7f8c;
         }
 
         /* 响应式设计 */
@@ -885,7 +1019,7 @@
     <div class="container">
         <!-- 左侧导航栏 -->
         <div class="sidebar">
-            <div class="logo" onclick="window.location.href='./ui-layout.html'">
+            <div class="logo" onclick="window.location.href='./index.html'">
                 <h1>Sugar.AI</h1>
                 <p>AI Girlfriend Platform</p>
             </div>
@@ -961,6 +1095,21 @@
             <!-- 步骤内容容器 -->
             <div class="step-container" id="stepContainer">
                 <!-- 各步骤内容将通过JavaScript动态加载 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 结果展示模态框 -->
+    <div class="result-modal" id="resultModal">
+        <div class="result-content">
+            <button class="result-close" onclick="closeResult()">×</button>
+            <div class="result-title">Character Created Successfully!</div>
+            <img class="result-image" id="resultImage" src="" alt="Generated Character">
+            <div class="result-character-name" id="resultCharacterName"></div>
+            <div class="result-description" id="resultDescription"></div>
+            <div class="result-actions">
+                <button class="result-btn primary" onclick="chatWithCharacter()">Start Chatting</button>
+                <button class="result-btn secondary" onclick="createAnother()">Create Another</button>
             </div>
         </div>
     </div>
@@ -1499,7 +1648,10 @@
                     </div>
                 </div>
                 
-                <button class="btn-create" onclick="createCharacter()">Create Character</button>
+                <button class="btn-create" id="createBtn" onclick="createCharacter()">
+                    <div class="loading-spinner"></div>
+                    <span class="btn-text">Create Character</span>
+                </button>
             `;
         }
 
@@ -1612,6 +1764,38 @@
                 return;
             }
             
+            // 开始加载状态
+            startGenerating();
+            
+            // 模拟AI生成过程（3-5秒）
+            const generationTime = 3000 + Math.random() * 2000; // 3-5秒
+            
+            setTimeout(() => {
+                // 生成角色完成
+                completeGeneration();
+            }, generationTime);
+        }
+
+        // 开始生成状态
+        function startGenerating() {
+            const btn = document.getElementById('createBtn');
+            const btnText = btn.querySelector('.btn-text');
+            
+            btn.disabled = true;
+            btn.classList.add('loading');
+            btnText.textContent = 'Generating your character...';
+        }
+
+        // 完成生成
+        function completeGeneration() {
+            const btn = document.getElementById('createBtn');
+            const btnText = btn.querySelector('.btn-text');
+            
+            // 重置按钮状态
+            btn.disabled = false;
+            btn.classList.remove('loading');
+            btnText.textContent = 'Create Character';
+            
             // 生成随机ID
             const characterId = 'character_' + Date.now();
             
@@ -1625,11 +1809,107 @@
             // 保存到本地存储
             localStorage.setItem('newCharacter', JSON.stringify(fullCharacterData));
             
-            // 显示成功消息
-            alert('Character created successfully!');
+            // 生成结果图片和描述
+            const resultData = generateCharacterResult();
             
-            // 跳转到聊天页面
+            // 显示结果模态框
+            showResult(resultData);
+        }
+
+        // 生成角色结果（随机选择图片和生成描述）
+        function generateCharacterResult() {
+            // 可用的角色图片库
+            const characterImages = [
+                'assets/pic_1.jpeg',
+                'assets/pic_2.jpeg', 
+                'assets/pic_3.jpeg',
+                'assets/pic_4.jpeg',
+                'assets/pic_5.jpeg',
+                'assets/pic_6.jpeg',
+                'assets/pic_7.jpeg',
+                'assets/pic_8.jpeg',
+                'assets/pic_9.jpeg',
+                'assets/pic_10.jpeg'
+            ];
+            
+            // 随机选择一张图片
+            const randomImage = characterImages[Math.floor(Math.random() * characterImages.length)];
+            
+            // 生成角色描述
+            const personalityMap = {
+                'sweet': 'Sweet and caring',
+                'playful': 'Playful and energetic',
+                'mysterious': 'Mysterious and intriguing',
+                'confident': 'Confident and bold',
+                'shy': 'Shy and gentle',
+                'adventurous': 'Adventurous and spontaneous'
+            };
+            
+            const relationshipMap = {
+                'girlfriend': 'your loving girlfriend',
+                'friend': 'your close friend',
+                'companion': 'your loyal companion',
+                'mentor': 'your wise mentor',
+                'colleague': 'your supportive colleague'
+            };
+            
+            const styleText = characterData.style === 'realistic' ? 'realistic' : 'anime-style';
+            const personalityText = personalityMap[characterData.personality] || characterData.personality;
+            const relationshipText = relationshipMap[characterData.relationship] || characterData.relationship;
+            
+            const description = `Meet ${characterData.name}, your new ${styleText} AI companion! She's a ${characterData.age}-year-old ${personalityText} character who will be ${relationshipText}. Her ${characterData.hairColor} hair and ${characterData.eyeColor} eyes perfectly complement her ${characterData.bodyType} figure.`;
+            
+            return {
+                image: randomImage,
+                name: characterData.name,
+                description: description
+            };
+        }
+
+        // 显示结果模态框
+        function showResult(resultData) {
+            const modal = document.getElementById('resultModal');
+            const resultImage = document.getElementById('resultImage');
+            const resultName = document.getElementById('resultCharacterName');
+            const resultDescription = document.getElementById('resultDescription');
+            
+            resultImage.src = resultData.image;
+            resultName.textContent = resultData.name;
+            resultDescription.textContent = resultData.description;
+            
+            modal.classList.add('active');
+        }
+
+        // 关闭结果模态框
+        function closeResult() {
+            const modal = document.getElementById('resultModal');
+            modal.classList.remove('active');
+        }
+
+        // 开始聊天
+        function chatWithCharacter() {
+            closeResult();
             window.location.href = `chat.html?character=${encodeURIComponent(characterData.name)}`;
+        }
+
+        // 创建另一个角色
+        function createAnother() {
+            closeResult();
+            // 重置角色数据
+            characterData = {
+                style: '',
+                ethnicity: '',
+                age: 22,
+                hairColor: '',
+                eyeColor: '',
+                bodyType: '',
+                personality: '',
+                relationship: '',
+                name: ''
+            };
+            // 回到第一步
+            currentStep = 1;
+            loadStep(1);
         }
 
         // 检查图片是否能正确加载
@@ -1662,7 +1942,7 @@
                 const text = this.querySelector('.text').textContent;
                 
                 if (text === 'Explore') {
-                    window.location.href = './ui-layout.html';
+                    window.location.href = './index.html';
                 } else if (text === 'Chat') {
                     window.location.href = './chat.html';
                 } else if (text === 'Dashboard') {
