@@ -176,8 +176,7 @@
         }
 
         .content-header {
-            padding: 30px 40px;
-            border-bottom: 1px solid #333;
+            padding: 40px 40px 20px 40px;
             background: linear-gradient(135deg, rgba(237, 127, 140, 0.05) 0%, transparent 100%);
         }
 
@@ -194,9 +193,27 @@
         }
 
         .content-body {
-            padding: 40px;
-            height: calc(100vh - 120px);
+            padding: 0;
+            height: calc(100vh - 0px);
             overflow-y: auto;
+            display: block;
+            box-sizing: border-box;
+            padding-bottom: 200px;
+        }
+
+        .content-body:has(.not-logged-in-content) {
+            padding: 0;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .not-logged-in-content {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #212121;
         }
 
         /* Dashboard 标签页设计 */
@@ -402,9 +419,9 @@
             transition: all 0.3s ease;
             cursor: pointer;
             overflow: hidden;
-            aspect-ratio: 3/4; /* 3:4 比例 */
             position: relative;
             max-width: 320px;
+            height: 400px;
         }
 
         .history-item:hover {
@@ -415,13 +432,179 @@
 
         .history-preview {
             width: 100%;
-            height: 70%; /* 图片占70%高度 */
+            height: 65%; /* 图片占65%高度 */
             background: linear-gradient(135deg, #333, #2a2a2a);
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             position: relative;
             overflow: hidden;
+        }
+
+        .history-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            background: #000;
+            border-radius: 0;
+        }
+
+        .history-preview .video-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .history-preview .video-overlay:hover {
+            background: rgba(237, 127, 140, 0.8);
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .history-item.video-type {
+            position: relative;
+        }
+
+        .history-item.video-type::before {
+            content: "🎥";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 3;
+            background: rgba(237, 127, 140, 0.9);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* 历史记录预览模态框 */
+        .history-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            overflow: hidden;
+        }
+
+        .history-modal.active {
+            display: flex;
+        }
+
+        .history-modal-content {
+            max-width: calc(100vw - 80px);
+            max-height: calc(100vh - 80px);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 40px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .history-modal-image {
+            max-width: 90vw !important;
+            max-height: 90vh !important;
+            width: auto;
+            height: auto;
+            border-radius: 10px;
+            object-fit: contain;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            transition: opacity 0.3s ease;
+        }
+
+        .history-modal-video {
+            max-width: 90vw !important;
+            max-height: 90vh !important;
+            width: auto;
+            height: auto;
+            border-radius: 10px;
+            object-fit: contain;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            transition: opacity 0.3s ease;
+        }
+
+        .history-modal-close {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 50%;
+            z-index: 10001;
+            transition: all 0.3s ease;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .history-modal-close:hover {
+            color: #ed7f8c;
+            border-color: #ed7f8c;
+            background: rgba(237, 127, 140, 0.2);
+            transform: scale(1.1);
+        }
+
+        .history-modal-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 18px;
+            display: none;
+        }
+
+        .history-modal-loading.show {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .history-modal-close {
+                top: 10px;
+                right: 10px;
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+                padding: 8px;
+            }
+
+            .history-modal-image {
+                max-width: 95vw !important;
+                max-height: 95vh !important;
+            }
+
+            .history-modal-video {
+                max-width: 95vw !important;
+                max-height: 95vh !important;
+            }
         }
 
         .history-content {
@@ -513,14 +696,157 @@
             color: #999;
         }
 
+        /* 顶部导航栏 - 仅在移动端显示 */
+        .top-nav {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(180deg, #2a2a2a 0%, #1e1e1e 100%);
+            border-bottom: 1px solid #333;
+            z-index: 1001;
+            padding: 0 20px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .top-nav-logo {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .top-nav-logo h1 {
+            color: #ed7f8c;
+            font-size: 20px;
+            font-weight: 700;
+            margin-right: 10px;
+        }
+
+        .top-nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .top-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            min-width: 60px;
+        }
+
+        .top-nav-item:hover {
+            background: rgba(237, 127, 140, 0.1);
+        }
+
+        .top-nav-item.active {
+            background: rgba(237, 127, 140, 0.15);
+        }
+
+        .top-nav-item .icon {
+            font-size: 16px;
+            color: #ed7f8c;
+            margin-bottom: 2px;
+        }
+
+        .top-nav-item .text {
+            font-size: 10px;
+            color: #ffffff;
+            font-weight: 500;
+        }
+
+        .top-nav-item.active .text {
+            color: #ed7f8c;
+        }
+
+        .top-nav-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .top-nav-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ed7f8c, #d16570);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .top-nav-gems {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            color: #ed7f8c;
+        }
+
         /* 响应式设计 */
         @media (max-width: 768px) {
             .sidebar {
-                width: 250px;
+                display: none;
             }
             
             .main-content {
-                margin-left: 250px;
+                margin-left: 0;
+            }
+            
+            .content-body {
+                padding: 0;
+                height: calc(100vh - 60px);
+                padding-bottom: 160px;
+            }
+            
+            .content-header {
+                padding: 20px 20px 10px 20px;
+            }
+            
+            .dashboard-tabs {
+                padding: 0 20px !important;
+            }
+            
+            .tab-content {
+                padding: 0 20px !important;
+            }
+            
+            .history-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 15px;
+            }
+            
+            .history-item {
+                height: 350px;
+                max-width: none;
+            }
+            
+            .history-preview {
+                height: 60%;
+            }
+            
+            .history-content {
+                height: 35%;
+                padding: 12px;
+            }
+            
+            .top-nav {
+                display: flex;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding-top: 60px;
             }
 
             .content-body {
@@ -538,12 +864,39 @@
         }
 
         @media (max-width: 480px) {
-            .sidebar {
-                width: 220px;
+            .top-nav {
+                padding: 0 15px;
             }
             
-            .main-content {
-                margin-left: 220px;
+            .top-nav-logo h1 {
+                font-size: 18px;
+            }
+            
+            .top-nav-menu {
+                gap: 2px;
+            }
+            
+            .top-nav-item {
+                padding: 6px 8px;
+                min-width: 50px;
+            }
+            
+            .top-nav-item .icon {
+                font-size: 14px;
+            }
+            
+            .top-nav-item .text {
+                font-size: 9px;
+            }
+            
+            .top-nav-avatar {
+                width: 28px;
+                height: 28px;
+                font-size: 12px;
+            }
+            
+            .top-nav-gems {
+                font-size: 11px;
             }
 
             .dashboard-tabs {
@@ -553,8 +906,32 @@
             .tab-item {
                 margin-bottom: 10px;
             }
+            
+            .content-header {
+                padding: 15px 15px 10px 15px;
+            }
+            
+            .dashboard-tabs {
+                padding: 0 15px !important;
+            }
+            
+            .tab-content {
+                padding: 0 15px !important;
+            }
         }
 
+        /* 确保滚动区域正确显示 */
+        .content-body {
+            scroll-behavior: smooth;
+            position: relative;
+        }
+        
+        /* 确保标签页内容正确显示 */
+        .tab-content.active {
+            display: block;
+            width: 100%;
+        }
+        
         /* 滚动条样式 */
         ::-webkit-scrollbar {
             width: 6px;
@@ -576,6 +953,38 @@
 </head>
 <body>
     <div class="container">
+        <!-- 顶部导航栏 - 仅在移动端显示 -->
+        <div class="top-nav">
+            <div class="top-nav-logo" onclick="window.location.href='./index.html'">
+                <h1>Sugar.AI</h1>
+            </div>
+            <div class="top-nav-menu">
+                <div class="top-nav-item" data-nav="explore">
+                    <div class="icon">🔍</div>
+                    <div class="text">Explore</div>
+                </div>
+                <div class="top-nav-item" data-nav="create">
+                    <div class="icon">✨</div>
+                    <div class="text">Create</div>
+                </div>
+                <div class="top-nav-item" data-nav="generate">
+                    <div class="icon">🎨</div>
+                    <div class="text">Generate</div>
+                </div>
+                <div class="top-nav-item active" data-nav="dashboard">
+                    <div class="icon">⚙️</div>
+                    <div class="text">Dashboard</div>
+                </div>
+            </div>
+            <div class="top-nav-user">
+                <div class="top-nav-gems">
+                    <span>💎</span>
+                    <span id="top-nav-gem-count">1,250</span>
+                </div>
+                <div class="top-nav-avatar">U</div>
+            </div>
+        </div>
+        
         <!-- 左侧导航栏 -->
         <div class="sidebar">
             <div class="logo" onclick="window.location.href='./index.html'">
@@ -588,7 +997,7 @@
                     <div class="icon">🔍</div>
                     <div class="text">Explore</div>
                 </div>
-                <div class="nav-item">
+                <div class="nav-item" style="display: none;">
                     <div class="icon">💬</div>
                     <div class="text">Chat</div>
                 </div>
@@ -639,197 +1048,42 @@
 
         <!-- 主内容区域 -->
         <div class="main-content">
-            <div class="content-header">
-                <h1 class="content-title">Personal Dashboard</h1>
-                <p class="content-subtitle">Manage your account, view history, and access support resources</p>
-            </div>
-            
             <div class="content-body">
                 <!-- Not Logged In Content -->
                 <div class="not-logged-in-content" id="not-logged-in-content">
                     <div class="login-required-card">
-                        <div class="login-required-icon">🔒</div>
-                        <h2>Dashboard Access Required</h2>
-                        <p>You need to sign in to access your personal dashboard and account settings.</p>
-                        
-                        <div class="login-benefits">
-                            <h3>With a Sugar.AI account, you can:</h3>
-                            <ul>
-                                <li><span class="benefit-icon">👤</span> Manage your personal profile</li>
-                                <li><span class="benefit-icon">💎</span> Track your Gem balance and usage</li>
-                                <li><span class="benefit-icon">📊</span> View your generation history</li>
-                                <li><span class="benefit-icon">👑</span> Upgrade to Premium membership</li>
-                                <li><span class="benefit-icon">💬</span> Save chat conversations</li>
-                                <li><span class="benefit-icon">🎨</span> Create custom AI characters</li>
-                            </ul>
-                        </div>
+                        <h2>Sign in to Access Your <span class="highlight">Dashboard</span></h2>
+                        <p>Manage your AI girlfriend experience, track your generation history, and access premium features with your Sugar.AI account.</p>
                         
                         <div class="login-actions">
                             <button class="primary-login-btn" onclick="window.location.href='./auth.html'">
-                                Sign In / Register
+                                Sign in to Continue
                             </button>
+                        </div>
+                        
+                        <div class="login-footer">
+                            You need to be <span class="highlight" onclick="window.location.href='./auth.html'">signed in</span> to access your dashboard.
                         </div>
                     </div>
                 </div>
 
                 <!-- Logged In Content -->
                 <div class="logged-in-content" id="logged-in-content" style="display: none;">
+                    <!-- 内容头部 -->
+                    <div class="content-header">
+                        <h1 class="content-title">Personal Dashboard</h1>
+                        <p class="content-subtitle">Manage your account, view history, and access support resources</p>
+                    </div>
+                    
                     <!-- Dashboard 标签页 -->
-                    <div class="dashboard-tabs">
-                        <div class="tab-item active" data-tab="personal">Personal Info</div>
-                        <div class="tab-item" data-tab="membership">Membership</div>
-                        <div class="tab-item" data-tab="history">Generation History</div>
+                    <div class="dashboard-tabs" style="padding: 0 40px;">
+                        <div class="tab-item active" data-tab="history">Generation History</div>
+                        <div class="tab-item" data-tab="personal">Personal Info & Membership</div>
                         <div class="tab-item" data-tab="support">Help & Support</div>
-                    </div>
-
-                <!-- 个人信息标签页 -->
-                <div class="tab-content active" id="personal">
-                    <div class="info-card">
-                        <div class="card-title">
-                            <span class="icon">👤</span>
-                            Personal Information
-                        </div>
-                        <div class="profile-section">
-                            <div class="profile-avatar">U</div>
-                            <div class="profile-info">
-                                <div class="info-field">
-                                    <div class="info-label">Username</div>
-                                    <div class="info-value editable">Username</div>
-                                </div>
-                                <div class="info-field">
-                                    <div class="info-label">Email Address</div>
-                                    <div class="info-value">user@example.com</div>
-                                </div>
-                                <div class="info-field">
-                                    <div class="info-label">Account Type</div>
-                                    <div class="info-value">Premium Member</div>
-                                </div>
-                                <div class="info-field">
-                                    <div class="info-label">Member Since</div>
-                                    <div class="info-value">January 2024</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="info-card">
-                        <div class="card-title">
-                            <span class="icon">🔒</span>
-                            Account Security
-                        </div>
-                        <div class="profile-info">
-                            <div class="info-field">
-                                <div class="info-label">Password</div>
-                                <div class="info-value editable">••••••••</div>
-                            </div>
-                            <div class="info-field">
-                                <div class="info-label">Two-Factor Authentication</div>
-                                <div class="info-value editable">Disabled</div>
-                            </div>
-                            <div class="info-field">
-                                <div class="info-label">Login Sessions</div>
-                                <div class="info-value editable">Manage Sessions</div>
-                            </div>
-                            <div class="info-field">
-                                <div class="info-label">Account Verification</div>
-                                <div class="info-value">✅ Verified</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="info-card">
-                        <div class="card-title">
-                            <span class="icon">⚙️</span>
-                            Account Settings
-                        </div>
-                        <div class="account-settings-layout">
-                            <div class="info-field">
-                                <div class="info-label">Account Status</div>
-                                <div class="info-value">Active</div>
-                            </div>
-                            <div class="account-actions">
-                                <div class="action-row danger-field">
-                                    <div class="action-label">Delete Account</div>
-                                    <button class="action-btn danger-btn" onclick="showDeleteAccountModal()">
-                                        Delete My Account
-                                    </button>
-                                </div>
-                                <div class="action-row">
-                                    <div class="action-label">Sign Out</div>
-                                    <button class="action-btn warning-btn" onclick="signOut()">
-                                        Sign Out from All Devices
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 会员信息标签页 -->
-                <div class="tab-content" id="membership">
-                    <div class="info-card membership-card">
-                        <div class="card-title">
-                            <span class="icon">👑</span>
-                            Membership Status
-                        </div>
-                        <div class="membership-status">
-                            <div class="status-badge">Premium Member</div>
-                            <div class="gem-display">
-                                <div class="gem-amount">
-                                    <span class="icon">💎</span>
-                                    <span class="number">1,250</span>
-                                </div>
-                                <button class="topup-btn" onclick="window.location.href='./purchase.html'">Top Up Gems</button>
-                            </div>
-                        </div>
-                        <div class="profile-info">
-                            <div class="info-field">
-                                <div class="info-label">Plan Type</div>
-                                <div class="info-value">Premium Monthly</div>
-                            </div>
-                            <div class="info-field">
-                                <div class="info-label">Next Billing Date</div>
-                                <div class="info-value">March 15, 2024</div>
-                            </div>
-                            <div class="info-field">
-                                <div class="info-label">Gems Used This Month</div>
-                                <div class="info-value">850 Gems</div>
-                            </div>
-                            <div class="info-field">
-                                <div class="info-label">Total Generations</div>
-                                <div class="info-value">127 Images, 23 Videos</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="info-card">
-                        <div class="card-title">
-                            <span class="icon">⚙️</span>
-                            Usage Statistics
-                        </div>
-                        <div class="profile-info">
-                            <div class="info-field">
-                                <div class="info-label">Images Generated</div>
-                                <div class="info-value">127 total</div>
-                            </div>
-                            <div class="info-field">
-                                <div class="info-label">Videos Created</div>
-                                <div class="info-value">23 total</div>
-                            </div>
-                            <div class="info-field">
-                                <div class="info-label">Chat Messages</div>
-                                <div class="info-value">2,456 messages</div>
-                            </div>
-                            <div class="info-field">
-                                <div class="info-label">Characters Created</div>
-                                <div class="info-value">8 custom characters</div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- 生成历史标签页 -->
-                <div class="tab-content" id="history">
+                <div class="tab-content active" id="history" style="padding: 0 40px;">
                     <div class="history-grid">
                         <div class="history-item">
                             <div class="history-preview" style="background-image: url('assets/pic_1.jpeg');">
@@ -847,8 +1101,13 @@
                             </div>
                         </div>
 
-                        <div class="history-item">
-                            <div class="history-preview" style="background-image: url('assets/pic_2.jpeg');">
+                        <div class="history-item video-type">
+                            <div class="history-preview">
+                                <video class="history-video" muted loop>
+                                    <source src="assets/video_1.mp4" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                                <div class="video-overlay" onclick="toggleVideo(this)">▶</div>
                             </div>
                             <div class="history-content">
                                 <div class="history-header">
@@ -991,10 +1250,142 @@
                             </div>
                         </div>
                     </div>
+                    <div style="height: 220px;"></div>
+                </div>
+
+                <!-- 个人信息和会员信息合并标签页 -->
+                <div class="tab-content" id="personal" style="padding: 0 40px;">
+                    <div class="info-card">
+                        <div class="card-title">
+                            <span class="icon">👤</span>
+                            Personal Information
+                        </div>
+                        <div class="profile-section">
+                            <div class="profile-avatar">U</div>
+                            <div class="profile-info">
+                                <div class="info-field">
+                                    <div class="info-label">Username</div>
+                                    <div class="info-value editable">Username</div>
+                                </div>
+                                <div class="info-field">
+                                    <div class="info-label">Email Address</div>
+                                    <div class="info-value">user@example.com</div>
+                                </div>
+                                <div class="info-field">
+                                    <div class="info-label">Account Type</div>
+                                    <div class="info-value">Premium Member</div>
+                                </div>
+                                <div class="info-field">
+                                    <div class="info-label">Member Since</div>
+                                    <div class="info-value">January 2024</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-card membership-card">
+                        <div class="card-title">
+                            <span class="icon">👑</span>
+                            Membership Status
+                        </div>
+                        <div class="membership-status">
+                            <div class="status-badge">Premium Member</div>
+                            <div class="gem-display">
+                                <div class="gem-amount">
+                                    <span class="icon">💎</span>
+                                    <span class="number">1,250</span>
+                                </div>
+                                <button class="topup-btn" onclick="window.location.href='./purchase.html'">Top Up Gems</button>
+                            </div>
+                        </div>
+                        <div class="profile-info">
+                            <div class="info-field">
+                                <div class="info-label">Plan Type</div>
+                                <div class="info-value">Premium Monthly</div>
+                            </div>
+                            <div class="info-field">
+                                <div class="info-label">Next Billing Date</div>
+                                <div class="info-value">March 15, 2024</div>
+                            </div>
+                            <div class="info-field">
+                                <div class="info-label">Gems Used This Month</div>
+                                <div class="info-value">850 Gems</div>
+                            </div>
+                            <div class="info-field">
+                                <div class="info-label">Total Generations</div>
+                                <div class="info-value">127 Images, 23 Videos</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="card-title">
+                            <span class="icon">⚙️</span>
+                            Usage Statistics
+                        </div>
+                        <div class="profile-info">
+                            <div class="info-field">
+                                <div class="info-label">Images Generated</div>
+                                <div class="info-value">127 total</div>
+                            </div>
+                            <div class="info-field">
+                                <div class="info-label">Videos Created</div>
+                                <div class="info-value">23 total</div>
+                            </div>
+                            <div class="info-field" style="display: none;">
+                                <div class="info-label">Chat Messages</div>
+                                <div class="info-value">2,456 messages</div>
+                            </div>
+                            <div class="info-field">
+                                <div class="info-label">Characters Created</div>
+                                <div class="info-value">8 custom characters</div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="info-card">
+                        <div class="card-title">
+                            <span class="icon">⚙️</span>
+                            Account Settings
+                        </div>
+                        <div class="account-settings-layout">
+                            <div class="info-field">
+                                <div class="info-label">Account Status</div>
+                                <div class="info-value">Active</div>
+                            </div>
+                            <div class="info-field">
+                                <div class="info-label">Language</div>
+                                <div class="info-value editable">English</div>
+                            </div>
+                        </div>
+                        <div class="account-actions">
+                            <div class="action-row">
+                                <div class="action-label">Change Password</div>
+                                <button class="action-btn secondary-btn">
+                                    Update Password
+                                </button>
+                            </div>
+                            <div class="action-row">
+                                <div class="action-label">Sign Out from All Devices</div>
+                                <button class="action-btn warning-btn" onclick="signOut()">
+                                    Sign Out All
+                                </button>
+                            </div>
+                            <div class="action-row danger-field">
+                                <div class="action-label">Delete Account</div>
+                                <button class="action-btn danger-btn" onclick="showDeleteAccountModal()">
+                                    Delete Account
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="height: 160px;"></div>
                 </div>
 
                 <!-- 帮助支持标签页 -->
-                <div class="tab-content" id="support">
+                <div class="tab-content" id="support" style="padding: 0 40px;">
                     <div class="support-links">
                         <a href="#" class="support-link">
                             <span class="icon">📞</span>
@@ -1060,6 +1451,7 @@
                             </div>
                         </a>
                     </div>
+                    <div style="height: 160px;"></div>
                 </div>
                 </div> <!-- End of logged-in-content -->
             </div>
@@ -1078,7 +1470,7 @@
                 <p>Deleting your account will permanently remove:</p>
                 <ul>
                     <li>All your personal data and settings</li>
-                    <li>Chat history and conversations</li>
+                                                    <li style="display: none;">Chat history and conversations</li>
                     <li>Generated images and videos</li>
                     <li>Custom AI characters</li>
                     <li>Unused Gem balance</li>
@@ -1095,92 +1487,133 @@
     <style>
         /* Additional styles for login states and new features */
         .login-required-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            height: 100vh;
+            width: 100%;
+            background: #212121;
             text-align: center;
-            max-width: 600px;
-            margin: 60px auto;
-            padding: 60px 40px;
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-        }
-
-        .login-required-icon {
-            font-size: 80px;
-            margin-bottom: 30px;
+            padding: 40px 20px;
+            padding-top: 15vh;
         }
 
         .login-required-card h2 {
+            color: #ffffff;
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .login-required-card .highlight {
             color: #ed7f8c;
-            font-size: 32px;
-            margin-bottom: 16px;
             font-weight: 700;
         }
 
         .login-required-card p {
-            color: #ccc;
+            color: #999;
             font-size: 18px;
-            margin-bottom: 40px;
-            line-height: 1.6;
-        }
-
-        .login-benefits {
-            text-align: left;
-            margin: 40px 0;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .login-benefits h3 {
-            color: #ed7f8c;
-            margin-bottom: 20px;
-            font-size: 20px;
-        }
-
-        .login-benefits ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .login-benefits li {
-            display: flex;
-            align-items: center;
-            margin-bottom: 12px;
-            color: #ccc;
-            font-size: 16px;
-        }
-
-        .benefit-icon {
-            font-size: 20px;
-            margin-right: 15px;
-            min-width: 24px;
+            margin-bottom: 50px;
+            line-height: 1.5;
+            max-width: 500px;
         }
 
         .login-actions {
             display: flex;
             justify-content: center;
-            margin-top: 40px;
+            margin-bottom: 40px;
         }
 
         .primary-login-btn {
-            padding: 16px 40px;
+            padding: 18px 40px;
             background: linear-gradient(135deg, #ed7f8c, #d16570);
             border: none;
-            border-radius: 12px;
-            color: white;
+            border-radius: 8px;
+            color: #ffffff;
             font-size: 18px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            min-width: 200px;
         }
 
         .primary-login-btn:hover {
             background: linear-gradient(135deg, #d16570, #b85c7a);
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(237, 127, 140, 0.4);
+        }
+
+        .login-footer {
+            color: #999;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .login-footer .highlight {
+            color: #ed7f8c;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        /* 响应式设计 - 未登录状态 */
+        @media (max-width: 768px) {
+            .login-required-card {
+                height: 100vh;
+                padding: 30px 20px;
+            }
+
+            .login-required-card h2 {
+                font-size: 32px;
+                margin-bottom: 15px;
+            }
+
+            .login-required-card p {
+                font-size: 16px;
+                margin-bottom: 40px;
+            }
+
+            .login-actions {
+                margin-bottom: 30px;
+            }
+
+            .primary-login-btn {
+                padding: 16px 32px;
+                font-size: 16px;
+                min-width: 180px;
+            }
+
+            .login-footer {
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-required-card {
+                height: 100vh;
+                padding: 25px 15px;
+            }
+
+            .login-required-card h2 {
+                font-size: 24px;
+                margin-bottom: 12px;
+            }
+
+            .login-required-card p {
+                font-size: 14px;
+                margin-bottom: 35px;
+            }
+
+            .primary-login-btn {
+                padding: 14px 28px;
+                font-size: 15px;
+                min-width: 160px;
+            }
+
+            .login-footer {
+                font-size: 12px;
+            }
         }
 
         .secondary-btn {
@@ -1401,10 +1834,23 @@
             document.getElementById('logged-in-content').style.display = 'block';
             document.getElementById('not-logged-in-content').style.display = 'none';
             
+            // Ensure content body can scroll properly
+            document.body.style.overflow = 'hidden';
+            const contentBody = document.querySelector('.content-body');
+            if (contentBody) {
+                contentBody.style.overflowY = 'auto';
+            }
+            
             if (currentUser) {
                 document.getElementById('username').textContent = currentUser.name || currentUser.email || 'User';
                 document.getElementById('user-status').textContent = currentUser.membershipType || 'Free Member';
                 document.getElementById('gem-count').textContent = currentUser.gemBalance || '0';
+                
+                // Update top nav user info
+                const topNavGemCount = document.getElementById('top-nav-gem-count');
+                if (topNavGemCount) {
+                    topNavGemCount.textContent = currentUser.gemBalance || '0';
+                }
                 
                 // Update dashboard content with user data
                 updateDashboardContent();
@@ -1416,7 +1862,20 @@
             document.getElementById('user-logged-in').style.display = 'none';
             document.getElementById('user-not-logged-in').style.display = 'block';
             document.getElementById('logged-in-content').style.display = 'none';
-            document.getElementById('not-logged-in-content').style.display = 'block';
+            document.getElementById('not-logged-in-content').style.display = 'flex';
+            
+            // Update top nav user info
+            const topNavGemCount = document.getElementById('top-nav-gem-count');
+            if (topNavGemCount) {
+                topNavGemCount.textContent = '0';
+            }
+            
+            // Ensure the page doesn't scroll for login page
+            document.body.style.overflow = 'hidden';
+            const contentBody = document.querySelector('.content-body');
+            if (contentBody) {
+                contentBody.style.overflowY = 'hidden';
+            }
         }
 
         // Update dashboard content with user data
@@ -1468,6 +1927,14 @@
         // Initialize login status on page load
         document.addEventListener('DOMContentLoaded', function() {
             checkLoginStatus();
+            
+            // Ensure proper scroll behavior after page load
+            setTimeout(function() {
+                const contentBody = document.querySelector('.content-body');
+                if (contentBody && document.getElementById('logged-in-content').style.display !== 'none') {
+                    contentBody.style.overflowY = 'auto';
+                }
+            }, 100);
         });
 
         // Tab switching functionality
@@ -1500,9 +1967,9 @@
                     return;
                 }
                 
-                // Handle Chat navigation - redirect to chat.html
+                // Handle Chat navigation - temporarily disabled
                 if (text === 'Chat') {
-                    window.location.href = './chat.html';
+                    alert('Chat feature is temporarily unavailable. Please try other features!');
                     return;
                 }
                 
@@ -1520,6 +1987,47 @@
                 
                 // Handle other navigation items - show alert for now
                 alert(`Navigate to ${text} page\n(In production, this would redirect to the actual page)`);
+            });
+        });
+
+        // 导航点击事件处理函数
+        function handleNavigation(navType) {
+            if (navType === 'explore') {
+                window.location.href = './index.html';
+                return;
+            }
+            
+            if (navType === 'create') {
+                window.location.href = './create.html';
+                return;
+            }
+            
+            if (navType === 'generate') {
+                window.location.href = './generate.html';
+                return;
+            }
+            
+            if (navType === 'dashboard') {
+                // Current page - no action needed
+                return;
+            }
+        }
+        
+        // 顶部导航栏点击事件
+        document.querySelectorAll('.top-nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const navType = this.getAttribute('data-nav');
+                
+                // Remove active state from other top nav items
+                document.querySelectorAll('.top-nav-item').forEach(nav => {
+                    nav.classList.remove('active');
+                });
+                
+                // Add active state to current item
+                this.classList.add('active');
+                
+                // Handle navigation
+                handleNavigation(navType);
             });
         });
 
@@ -1544,9 +2052,69 @@
 
         // 历史记录项点击效果
         document.querySelectorAll('.history-item').forEach(item => {
-            item.addEventListener('click', function() {
+            item.addEventListener('click', function(e) {
+                // 避免点击视频控制按钮时触发
+                if (e.target.classList.contains('video-overlay') || e.target.closest('.video-overlay')) {
+                    return;
+                }
+                
                 const type = this.querySelector('.history-type').textContent;
-                alert(`View details for ${type}\n(In production, this would show full generation details or preview)`);
+                
+                // 检查是否为视频类型
+                if (this.classList.contains('video-type')) {
+                    // 获取视频URL
+                    const videoElement = this.querySelector('.history-video');
+                    if (videoElement) {
+                        const videoSource = videoElement.querySelector('source');
+                        if (videoSource && videoSource.src) {
+                            openHistoryModal(type, null, videoSource.src);
+                            return;
+                        }
+                    }
+                } else {
+                    // 图片类型
+                    const previewElement = this.querySelector('.history-preview');
+                    if (previewElement) {
+                        const backgroundImage = previewElement.style.backgroundImage;
+                        if (backgroundImage) {
+                            // 从 background-image 属性提取URL
+                            const imageUrl = backgroundImage.slice(5, -2); // 移除 'url("' 和 '")'
+                            openHistoryModal(type, imageUrl, null);
+                            return;
+                        }
+                    }
+                }
+                
+                // 如果没有找到图片或视频，显示提示
+                alert(`View details for ${type}\n(No preview available)`);
+            });
+        });
+
+        // 视频播放控制
+        function toggleVideo(overlay) {
+            const video = overlay.parentElement.querySelector('.history-video');
+            if (video.paused) {
+                video.play();
+                overlay.textContent = '⏸';
+                overlay.style.background = 'rgba(237, 127, 140, 0.8)';
+            } else {
+                video.pause();
+                overlay.textContent = '▶';
+                overlay.style.background = 'rgba(0, 0, 0, 0.7)';
+            }
+        }
+
+        // 自动播放视频预览
+        document.addEventListener('DOMContentLoaded', function() {
+            const videos = document.querySelectorAll('.history-video');
+            videos.forEach(video => {
+                video.addEventListener('loadedmetadata', function() {
+                    // 静音自动播放预览
+                    video.muted = true;
+                    video.play().catch(e => {
+                        console.log('Auto-play was prevented:', e);
+                    });
+                });
             });
         });
 
@@ -1556,6 +2124,133 @@
                 hideDeleteAccountModal();
             }
         });
+
+        // 历史记录预览模态框功能
+        function openHistoryModal(historyType, imageUrl, videoUrl) {
+            const modal = document.getElementById('historyModal');
+            const modalImage = document.getElementById('historyModalImage');
+            const modalVideo = document.getElementById('historyModalVideo');
+            const modalLoading = document.getElementById('historyModalLoading');
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Show loading indicator
+            modalLoading.classList.add('show');
+            modalImage.style.display = 'none';
+            modalVideo.style.display = 'none';
+            
+            if (videoUrl) {
+                // Display video
+                modalVideo.oncanplay = () => {
+                    modalLoading.classList.remove('show');
+                    modalVideo.style.display = 'block';
+                    modalVideo.style.opacity = '1';
+                    
+                    // 额外检查和限制视频尺寸
+                    const maxWidth = window.innerWidth * 0.9;
+                    const maxHeight = window.innerHeight * 0.9;
+                    
+                    modalVideo.style.maxWidth = maxWidth + 'px';
+                    modalVideo.style.maxHeight = maxHeight + 'px';
+                };
+                modalVideo.onerror = () => {
+                    modalLoading.classList.remove('show');
+                    modalLoading.textContent = 'Failed to load video';
+                    modalLoading.classList.add('show');
+                };
+                modalVideo.style.opacity = '0';
+                modalVideo.querySelector('source').src = videoUrl;
+                modalVideo.load();
+            } else if (imageUrl) {
+                // Display image
+                modalImage.onload = () => {
+                    modalLoading.classList.remove('show');
+                    modalImage.style.display = 'block';
+                    modalImage.style.opacity = '1';
+                    
+                    // 额外检查和限制图片尺寸
+                    const maxWidth = window.innerWidth * 0.9;
+                    const maxHeight = window.innerHeight * 0.9;
+                    
+                    if (modalImage.naturalWidth > maxWidth || modalImage.naturalHeight > maxHeight) {
+                        modalImage.style.maxWidth = maxWidth + 'px';
+                        modalImage.style.maxHeight = maxHeight + 'px';
+                    }
+                };
+                modalImage.onerror = () => {
+                    modalLoading.classList.remove('show');
+                    modalLoading.textContent = 'Failed to load image';
+                    modalLoading.classList.add('show');
+                };
+                modalImage.style.opacity = '0';
+                modalImage.src = imageUrl;
+            }
+            
+            // Add keyboard event listener
+            document.addEventListener('keydown', handleHistoryModalKeydown);
+        }
+
+        function closeHistoryModal() {
+            const modal = document.getElementById('historyModal');
+            const modalLoading = document.getElementById('historyModalLoading');
+            
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            
+            // Hide loading indicator
+            modalLoading.classList.remove('show');
+            
+            // Pause video if playing
+            const modalVideo = document.getElementById('historyModalVideo');
+            modalVideo.pause();
+            
+            // Remove keyboard event listener
+            document.removeEventListener('keydown', handleHistoryModalKeydown);
+        }
+
+        function handleHistoryModalKeydown(e) {
+            if (e.key === 'Escape') {
+                closeHistoryModal();
+            }
+        }
+
+        // 窗口大小改变时重新调整模态框中的图片/视频尺寸
+        function handleHistoryWindowResize() {
+            const modal = document.getElementById('historyModal');
+            if (modal && modal.classList.contains('active')) {
+                const modalImage = document.getElementById('historyModalImage');
+                const modalVideo = document.getElementById('historyModalVideo');
+                
+                const maxWidth = window.innerWidth * 0.9;
+                const maxHeight = window.innerHeight * 0.9;
+                
+                if (modalImage.style.display === 'block') {
+                    modalImage.style.maxWidth = maxWidth + 'px';
+                    modalImage.style.maxHeight = maxHeight + 'px';
+                }
+                
+                if (modalVideo.style.display === 'block') {
+                    modalVideo.style.maxWidth = maxWidth + 'px';
+                    modalVideo.style.maxHeight = maxHeight + 'px';
+                }
+            }
+        }
+
+        // 添加窗口大小改变监听器
+        window.addEventListener('resize', handleHistoryWindowResize);
     </script>
+
+    <!-- 历史记录预览模态框 -->
+    <div class="history-modal" id="historyModal">
+        <div class="history-modal-content">
+            <button class="history-modal-close" onclick="closeHistoryModal()">×</button>
+            <div class="history-modal-loading" id="historyModalLoading">Loading...</div>
+            <img class="history-modal-image" id="historyModalImage" src="" alt="History content" style="display: none;">
+            <video class="history-modal-video" id="historyModalVideo" controls style="display: none;">
+                <source src="" type="video/mp4">
+            </video>
+        </div>
+    </div>
 </body>
 </html> 

@@ -179,6 +179,7 @@
             padding: 30px 40px;
             border-bottom: 1px solid #333;
             background: linear-gradient(135deg, rgba(237, 127, 140, 0.05) 0%, transparent 100%);
+            margin: 0 -40px 40px -40px;
         }
 
         .content-title {
@@ -195,8 +196,9 @@
 
         .content-body {
             padding: 40px;
-            height: calc(100vh - 120px);
+            height: 100vh;
             overflow-y: auto;
+            padding-top: 0;
         }
 
         /* SoulFun.ai inspired character cards */
@@ -359,6 +361,103 @@
             background: #d16570;
         }
 
+        /* 顶部导航栏 - 仅在移动端显示 */
+        .top-nav {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(180deg, #2a2a2a 0%, #1e1e1e 100%);
+            border-bottom: 1px solid #333;
+            z-index: 1001;
+            padding: 0 20px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .top-nav-logo {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .top-nav-logo h1 {
+            color: #ed7f8c;
+            font-size: 20px;
+            font-weight: 700;
+            margin-right: 10px;
+        }
+
+        .top-nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .top-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            min-width: 60px;
+        }
+
+        .top-nav-item:hover {
+            background: rgba(237, 127, 140, 0.1);
+        }
+
+        .top-nav-item.active {
+            background: rgba(237, 127, 140, 0.15);
+        }
+
+        .top-nav-item .icon {
+            font-size: 16px;
+            color: #ed7f8c;
+            margin-bottom: 2px;
+        }
+
+        .top-nav-item .text {
+            font-size: 10px;
+            color: #ffffff;
+            font-weight: 500;
+        }
+
+        .top-nav-item.active .text {
+            color: #ed7f8c;
+        }
+
+        .top-nav-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .top-nav-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ed7f8c, #d16570);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .top-nav-gems {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            color: #ed7f8c;
+        }
+
         /* 响应式设计 */
         @media (max-width: 1400px) {
             .character-grid {
@@ -380,11 +479,20 @@
 
         @media (max-width: 768px) {
             .sidebar {
-                width: 250px;
+                display: none;
+            }
+            
+            .top-nav {
+                display: flex;
             }
             
             .main-content {
-                margin-left: 250px;
+                margin-left: 0;
+                padding-top: 60px;
+            }
+            
+            .content-body {
+                padding-top: 0;
             }
             
             .character-grid {
@@ -399,19 +507,54 @@
             .content-body {
                 padding: 30px 20px;
             }
+            
+            .content-header {
+                margin: 0 -20px 30px -20px;
+            }
         }
 
         @media (max-width: 480px) {
-            .sidebar {
-                width: 220px;
+            .top-nav {
+                padding: 0 15px;
             }
             
-            .main-content {
-                margin-left: 220px;
+            .top-nav-logo h1 {
+                font-size: 18px;
+            }
+            
+            .top-nav-menu {
+                gap: 2px;
+            }
+            
+            .top-nav-item {
+                padding: 6px 8px;
+                min-width: 50px;
+            }
+            
+            .top-nav-item .icon {
+                font-size: 14px;
+            }
+            
+            .top-nav-item .text {
+                font-size: 9px;
+            }
+            
+            .top-nav-avatar {
+                width: 28px;
+                height: 28px;
+                font-size: 12px;
+            }
+            
+            .top-nav-gems {
+                font-size: 11px;
             }
 
             .content-body {
                 padding: 20px 15px;
+            }
+            
+            .content-header {
+                margin: 0 -15px 20px -15px;
             }
 
             .character-grid {
@@ -427,6 +570,38 @@
 </head>
 <body>
     <div class="container">
+        <!-- 顶部导航栏 - 仅在移动端显示 -->
+        <div class="top-nav">
+            <div class="top-nav-logo" onclick="window.location.reload()">
+                <h1>Sugar.AI</h1>
+            </div>
+            <div class="top-nav-menu">
+                <div class="top-nav-item active" data-nav="explore">
+                    <div class="icon">🔍</div>
+                    <div class="text">Explore</div>
+                </div>
+                <div class="top-nav-item" data-nav="create">
+                    <div class="icon">✨</div>
+                    <div class="text">Create</div>
+                </div>
+                <div class="top-nav-item" data-nav="generate">
+                    <div class="icon">🎨</div>
+                    <div class="text">Generate</div>
+                </div>
+                <div class="top-nav-item" data-nav="dashboard">
+                    <div class="icon">⚙️</div>
+                    <div class="text">Dashboard</div>
+                </div>
+            </div>
+            <div class="top-nav-user">
+                <div class="top-nav-gems">
+                    <span>💎</span>
+                    <span id="top-nav-gem-count">1,250</span>
+                </div>
+                <div class="top-nav-avatar">U</div>
+            </div>
+        </div>
+        
         <!-- 左侧导航栏 -->
         <div class="sidebar">
             <div class="logo" onclick="window.location.reload()">
@@ -439,7 +614,7 @@
                     <div class="icon">🔍</div>
                     <div class="text active">Explore</div>
                 </div>
-                <div class="nav-item">
+                <div class="nav-item" style="display: none;">
                     <div class="icon">💬</div>
                     <div class="text">Chat</div>
                 </div>
@@ -490,12 +665,12 @@
 
         <!-- 主内容区域 -->
         <div class="main-content">
+            <div class="content-body">
             <div class="content-header">
                 <h1 class="content-title">Explore AI Girlfriends</h1>
                 <p class="content-subtitle">Discover your perfect virtual companion and start amazing interactive experiences</p>
             </div>
             
-            <div class="content-body">
                 <!-- Character Grid with SoulFun.ai inspired proportions -->
                 <div class="character-grid">
                     <!-- Character 1 - Using your pic_1.jpeg -->
@@ -674,7 +849,6 @@
                                 <span class="character-tag">Intelligent</span>
                                 <span class="character-tag">Seductive</span>
                                 <span class="character-tag">Strict</span>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -715,6 +889,12 @@
                 document.getElementById('username').textContent = currentUser.name || currentUser.email || 'User';
                 document.getElementById('user-status').textContent = currentUser.membershipType || 'Free Member';
                 document.getElementById('gem-count').textContent = currentUser.gemBalance || '0';
+                
+                // Update top nav user info
+                const topNavGemCount = document.getElementById('top-nav-gem-count');
+                if (topNavGemCount) {
+                    topNavGemCount.textContent = currentUser.gemBalance || '0';
+                }
             }
         }
 
@@ -722,6 +902,12 @@
         function showNotLoggedInState() {
             document.getElementById('user-logged-in').style.display = 'none';
             document.getElementById('user-not-logged-in').style.display = 'block';
+            
+            // Update top nav user info
+            const topNavGemCount = document.getElementById('top-nav-gem-count');
+            if (topNavGemCount) {
+                topNavGemCount.textContent = '0';
+            }
         }
 
         // Logout function
@@ -752,42 +938,34 @@
             checkLoginStatus();
         });
 
-        // Navigation switching functionality
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const text = this.querySelector('.text').textContent;
-                
+        // 导航点击事件处理函数
+        function handleNavigation(navType) {
                 // Handle Dashboard navigation - redirect to dashboard.html
-                if (text === 'Dashboard') {
+            if (navType === 'dashboard') {
                     window.location.href = './dashboard.html';
                     return;
                 }
                 
-                // Handle Chat navigation - redirect to chat.html
-                if (text === 'Chat') {
-                    window.location.href = './chat.html';
+            // Handle Chat navigation - temporarily disabled
+            if (navType === 'chat') {
+                alert('Chat feature is temporarily unavailable. Please try other features!');
                     return;
                 }
                 
                 // Handle Create navigation - redirect to create.html
-                if (text === 'Create') {
+            if (navType === 'create') {
                     window.location.href = './create.html';
                     return;
                 }
                 
                 // Handle Generate navigation - redirect to generate.html
-                if (text === 'Generate') {
+            if (navType === 'generate') {
                     window.location.href = './generate.html';
                     return;
                 }
                 
-                // Handle other navigation items - show alert for now
-                if (text !== 'Explore') {
-                    alert(`Navigate to ${text} page\n(In production, this would redirect to the actual page)`);
-                    return;
-                }
-                
                 // For Explore page (current page) - update UI state
+            if (navType === 'explore') {
                 // Remove active state from other items
                 document.querySelectorAll('.nav-item').forEach(nav => {
                     nav.classList.remove('active');
@@ -795,20 +973,39 @@
                 });
                 
                 // Add active state to current item
+                document.querySelectorAll('.nav-item').forEach(nav => {
+                    const text = nav.querySelector('.text').textContent;
+                    if (text === 'Explore') {
+                        nav.classList.add('active');
+                        nav.querySelector('.text').classList.add('active');
+                    }
+                });
+            }
+        }
+        
+        // 左侧导航栏点击事件
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const text = this.querySelector('.text').textContent.toLowerCase();
+                handleNavigation(text);
+            });
+        });
+        
+        // 顶部导航栏点击事件
+        document.querySelectorAll('.top-nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const navType = this.getAttribute('data-nav');
+                
+                // Remove active state from other top nav items
+                document.querySelectorAll('.top-nav-item').forEach(nav => {
+                    nav.classList.remove('active');
+                });
+                
+                // Add active state to current item
                 this.classList.add('active');
-                this.querySelector('.text').classList.add('active');
                 
-                // Update content title and description
-                const titles = {
-                    'Explore': { title: 'Explore AI Girlfriends', subtitle: 'Discover your perfect virtual companion and start amazing interactive experiences' },
-                    'Chat': { title: 'Chat Conversations', subtitle: 'Engage in deep conversations with your AI girlfriend and share life moments' },
-                    'Create': { title: 'Create Character', subtitle: 'Customize your exclusive AI girlfriend and create unique virtual companions' },
-                    'Generate': { title: 'Content Generation', subtitle: 'Use AI technology to generate images, videos and exciting content' },
-                    'Dashboard': { title: 'Personal Dashboard', subtitle: 'Manage your account information, view history and consumption details' }
-                };
-                
-                document.querySelector('.content-title').textContent = titles[text].title;
-                document.querySelector('.content-subtitle').textContent = titles[text].subtitle;
+                // Handle navigation
+                handleNavigation(navType);
             });
         });
 
@@ -903,19 +1100,18 @@
                 const character = characterData[name];
                 
                 if (character) {
-                    // Create URL parameters with character data
+                    // Create URL parameters with character data for Generate page
                     const params = new URLSearchParams({
-                        name: name,
+                        character: name,
                         image: character.image,
                         age: character.age,
                         role: character.role,
                         tags: character.tags.join(','),
-                        status: character.status,
-                        greeting: character.greeting
+                        status: character.status
                     });
                     
-                    // Navigate to chat page with character data
-                    window.location.href = `./chat.html?${params.toString()}`;
+                    // Navigate to Generate page with character pre-selected
+                    window.location.href = `./generate.html?${params.toString()}`;
                 } else {
                     alert(`Character data not found for ${name}`);
                 }

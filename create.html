@@ -214,30 +214,34 @@
         }
 
         .progress-step {
-            width: 30px;
-            height: 30px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background: #333;
             border: 2px solid #444;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 16px;
+            font-weight: 700;
             color: #666;
             transition: all 0.3s ease;
+            flex-shrink: 0;
+            position: relative;
         }
 
         .progress-step.active {
             background: linear-gradient(135deg, #ed7f8c, #d16570);
             border-color: #ed7f8c;
             color: white;
+            box-shadow: 0 0 0 3px rgba(237, 127, 140, 0.3);
         }
 
         .progress-step.completed {
             background: #ed7f8c;
             border-color: #ed7f8c;
             color: white;
+            box-shadow: 0 0 0 2px rgba(237, 127, 140, 0.2);
         }
 
         .progress-line {
@@ -775,11 +779,10 @@
             background: linear-gradient(145deg, #2a2a2a, #1e1e1e);
             border-radius: 20px;
             padding: 30px;
-            max-width: 500px;
+            max-width: 900px;
             width: 90%;
             max-height: 90vh;
             overflow-y: auto;
-            text-align: center;
             border: 1px solid #333;
             position: relative;
         }
@@ -789,16 +792,35 @@
             font-weight: 700;
             color: #ed7f8c;
             margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* 新的布局样式 */
+        .result-layout {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .result-image-section {
+            flex: 0 0 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .result-info-section {
+            flex: 1;
+            text-align: left;
         }
 
         .result-image {
             width: 100%;
-            max-width: 300px;
+            max-width: 350px;
             height: auto;
-            max-height: 400px;
+            max-height: 450px;
             object-fit: cover;
             border-radius: 16px;
-            margin: 15px auto;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             display: block;
         }
@@ -814,13 +836,50 @@
             color: #999;
             font-size: 16px;
             line-height: 1.6;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+        }
+
+        .character-details {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #ccc;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .detail-value {
+            color: #ed7f8c;
+            font-weight: 600;
+            font-size: 14px;
         }
 
         .result-actions {
             display: flex;
             gap: 15px;
             justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-icon {
+            margin-right: 8px;
+            font-size: 18px;
         }
 
         .result-btn {
@@ -872,10 +931,33 @@
                 max-height: 95vh;
             }
             
+            .result-layout {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .result-image-section {
+                flex: none;
+            }
+            
             .result-image {
                 max-width: 250px;
                 max-height: 300px;
-                margin: 10px auto;
+                margin: 0 auto;
+            }
+            
+            .result-info-section {
+                text-align: center;
+            }
+            
+            .character-details {
+                padding: 15px;
+            }
+            
+            .detail-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
             }
             
             .result-title {
@@ -907,6 +989,10 @@
                 max-width: 98%;
             }
             
+            .result-layout {
+                gap: 15px;
+            }
+            
             .result-image {
                 max-width: 200px;
                 max-height: 250px;
@@ -925,6 +1011,18 @@
             .result-description {
                 font-size: 13px;
                 margin-bottom: 20px;
+            }
+            
+            .character-details {
+                padding: 12px;
+            }
+            
+            .detail-item {
+                padding: 6px 0;
+            }
+            
+            .detail-label, .detail-value {
+                font-size: 13px;
             }
         }
 
@@ -955,14 +1053,115 @@
             }
         }
 
+        /* 顶部导航栏 - 仅在移动端显示 */
+        .top-nav {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(180deg, #2a2a2a 0%, #1e1e1e 100%);
+            border-bottom: 1px solid #333;
+            z-index: 1001;
+            padding: 0 20px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .top-nav-logo {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .top-nav-logo h1 {
+            color: #ed7f8c;
+            font-size: 20px;
+            font-weight: 700;
+            margin-right: 10px;
+        }
+
+        .top-nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .top-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            min-width: 60px;
+        }
+
+        .top-nav-item:hover {
+            background: rgba(237, 127, 140, 0.1);
+        }
+
+        .top-nav-item.active {
+            background: rgba(237, 127, 140, 0.15);
+        }
+
+        .top-nav-item .icon {
+            font-size: 16px;
+            color: #ed7f8c;
+            margin-bottom: 2px;
+        }
+
+        .top-nav-item .text {
+            font-size: 10px;
+            color: #ffffff;
+            font-weight: 500;
+        }
+
+        .top-nav-item.active .text {
+            color: #ed7f8c;
+        }
+
+        .top-nav-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .top-nav-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ed7f8c, #d16570);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .top-nav-gems {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            color: #ed7f8c;
+        }
+
         @media (max-width: 768px) {
             .sidebar {
-                width: 100%;
-                margin-left: -100%;
+                display: none;
+            }
+            
+            .top-nav {
+                display: flex;
             }
             
             .main-content {
-                padding: 15px;
+                margin-left: 0;
+                padding: 80px 15px 15px 15px;
                 width: 100vw;
                 height: 100vh;
             }
@@ -1016,9 +1215,10 @@
             }
             
             .progress-step {
-                width: 25px;
-                height: 25px;
-                font-size: 12px;
+                width: 35px;
+                height: 35px;
+                font-size: 14px;
+                font-weight: 700;
             }
             
             .progress-line {
@@ -1044,7 +1244,7 @@
 
         @media (max-width: 480px) {
             .main-content {
-                padding: 10px;
+                padding: 70px 10px 10px 10px;
                 width: 100vw;
                 height: 100vh;
             }
@@ -1087,6 +1287,38 @@
 </head>
 <body>
     <div class="container">
+        <!-- 顶部导航栏 - 仅在移动端显示 -->
+        <div class="top-nav">
+            <div class="top-nav-logo" onclick="window.location.href='./index.html'">
+                <h1>Sugar.AI</h1>
+            </div>
+            <div class="top-nav-menu">
+                <div class="top-nav-item" data-nav="explore">
+                    <div class="icon">🔍</div>
+                    <div class="text">Explore</div>
+                </div>
+                <div class="top-nav-item active" data-nav="create">
+                    <div class="icon">✨</div>
+                    <div class="text">Create</div>
+                </div>
+                <div class="top-nav-item" data-nav="generate">
+                    <div class="icon">🎨</div>
+                    <div class="text">Generate</div>
+                </div>
+                <div class="top-nav-item" data-nav="dashboard">
+                    <div class="icon">⚙️</div>
+                    <div class="text">Dashboard</div>
+                </div>
+            </div>
+            <div class="top-nav-user">
+                <div class="top-nav-gems">
+                    <span>💎</span>
+                    <span id="top-nav-gem-count">1,250</span>
+                </div>
+                <div class="top-nav-avatar">U</div>
+            </div>
+        </div>
+        
         <!-- 左侧导航栏 -->
         <div class="sidebar">
             <div class="logo" onclick="window.location.href='./index.html'">
@@ -1099,7 +1331,7 @@
                     <div class="icon">🔍</div>
                     <div class="text">Explore</div>
                 </div>
-                <div class="nav-item">
+                <div class="nav-item" style="display: none;">
                     <div class="icon">💬</div>
                     <div class="text">Chat</div>
                 </div>
@@ -1174,12 +1406,70 @@
         <div class="result-content">
             <button class="result-close" onclick="closeResult()">×</button>
             <div class="result-title">Character Created Successfully!</div>
-            <img class="result-image" id="resultImage" src="" alt="Generated Character">
-            <div class="result-character-name" id="resultCharacterName"></div>
-            <div class="result-description" id="resultDescription"></div>
+            
+            <div class="result-layout">
+                <!-- 左侧图片区域 -->
+                <div class="result-image-section">
+                    <img class="result-image" id="resultImage" src="" alt="Generated Character">
+                </div>
+                
+                <!-- 右侧信息区域 -->
+                <div class="result-info-section">
+                    <div class="result-character-name" id="resultCharacterName"></div>
+                    <div class="result-description" id="resultDescription"></div>
+                    
+                    <!-- 角色详细信息 -->
+                    <div class="character-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Age:</span>
+                            <span class="detail-value" id="resultAge"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Style:</span>
+                            <span class="detail-value" id="resultStyle"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Ethnicity:</span>
+                            <span class="detail-value" id="resultEthnicity"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Hair Color:</span>
+                            <span class="detail-value" id="resultHairColor"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Eye Color:</span>
+                            <span class="detail-value" id="resultEyeColor"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Body Type:</span>
+                            <span class="detail-value" id="resultBodyType"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Outfit:</span>
+                            <span class="detail-value" id="resultOutfit"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Background:</span>
+                            <span class="detail-value" id="resultBackground"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 底部按钮区域 -->
             <div class="result-actions">
-                <button class="result-btn primary" onclick="chatWithCharacter()">Start Chatting</button>
-                <button class="result-btn secondary" onclick="createAnother()">Create Another</button>
+                <button class="result-btn secondary" onclick="createAnother()">
+                    <span class="btn-icon">🔄</span>
+                    Recreate Character
+                </button>
+                <button class="result-btn primary" onclick="generateCharacterImage()">
+                    <span class="btn-icon">🎨</span>
+                    Generate Image
+                </button>
+                <button class="result-btn primary" onclick="generateCharacterVideo()">
+                    <span class="btn-icon">🎬</span>
+                    Generate Video
+                </button>
             </div>
         </div>
     </div>
@@ -1245,8 +1535,8 @@
             hairColor: 'black',           // 默认选择第一项：Black
             eyeColor: 'dark_brown',       // 默认选择第一项：Dark Brown
             bodyType: 'petite',           // 默认选择第一项：Petite
-            personality: 'caregiver',     // 默认选择第一项：Caregiver
-            relationship: 'stranger',     // 默认选择第一项：Stranger
+            outfit: 'casual',             // 默认选择第一项：Casual
+            background: 'home',           // 默认选择第一项：Home
             name: 'Luna'                  // 默认角色名
         };
 
@@ -1273,14 +1563,14 @@
                 type: 'body'
             },
             5: {
-                title: 'Choose Personality',
-                subtitle: 'Select the personality that matches your ideal companion',
-                type: 'personality'
+                title: 'Choose Outfit',
+                subtitle: 'Select the clothing style and fashion for your character',
+                type: 'outfit'
             },
             6: {
-                title: 'Choose Relationship',
-                subtitle: 'Define your relationship with your AI companion',
-                type: 'relationship'
+                title: 'Choose Background',
+                subtitle: 'Select the setting and environment for your character',
+                type: 'background'
             },
             7: {
                 title: 'Summary',
@@ -1370,11 +1660,11 @@
                 case 'body':
                     content += getBodyContent();
                     break;
-                case 'personality':
-                    content += getPersonalityContent();
+                case 'outfit':
+                    content += getOutfitContent();
                     break;
-                case 'relationship':
-                    content += getRelationshipContent();
+                case 'background':
+                    content += getBackgroundContent();
                     break;
                 case 'summary':
                     content += getSummaryContent();
@@ -1557,31 +1847,31 @@
             return content;
         }
 
-        // 获取性格选择内容
-        function getPersonalityContent() {
-            const personalities = [
-                { id: 'caregiver', icon: '💖', title: 'Caregiver', description: 'Nurturing, protective, and always there to offer comfort.' },
-                { id: 'sage', icon: '🧠', title: 'Sage', description: 'Wise, reflective, and a source of guidance.' },
-                { id: 'innocent', icon: '⭐', title: 'Innocent', description: 'Optimistic, naive, and sees world with wonder.' },
-                { id: 'jester', icon: '🎭', title: 'Jester', description: 'Playful, humorous, and always there to make you laugh.' },
-                { id: 'temptress', icon: '💋', title: 'Temptress', description: 'Flirtatious, playful, and always leaving you wanting more.' },
-                { id: 'dominant', icon: '👑', title: 'Dominant', description: 'Assertive, controlling, and commanding.' },
-                { id: 'submissive', icon: '💕', title: 'Submissive', description: 'Obedient, yielding, and happy to follow.' },
-                { id: 'lover', icon: '💗', title: 'Lover', description: 'Romantic, affectionate, and cherishes deep emotional connections.' },
-                { id: 'nympho', icon: '🔥', title: 'Nympho', description: 'Insatiable, passionate, and constantly craving intimacy.' },
-                { id: 'mean', icon: '❄️', title: 'Mean', description: 'Cold, dismissive, and often sarcastic.' },
-                { id: 'confidant', icon: '💝', title: 'Confidant', description: 'Trustworthy, a good listener, and always can offer advice.' },
-                { id: 'experimenter', icon: '🔬', title: 'Experimenter', description: 'Curious, willing, and always eager to try new things.' }
+        // 获取穿着选择内容
+        function getOutfitContent() {
+            const outfits = [
+                { id: 'casual', icon: '👕', title: 'Casual', description: 'Comfortable everyday clothing like t-shirts and jeans' },
+                { id: 'elegant', icon: '👗', title: 'Elegant', description: 'Sophisticated dresses and formal attire' },
+                { id: 'business', icon: '💼', title: 'Business', description: 'Professional office wear and suits' },
+                { id: 'sporty', icon: '🏃‍♀️', title: 'Sporty', description: 'Athletic wear and fitness clothing' },
+                { id: 'sexy', icon: '🔥', title: 'Sexy', description: 'Alluring and provocative fashion choices' },
+                { id: 'vintage', icon: '🎭', title: 'Vintage', description: 'Retro and classic fashion styles' },
+                { id: 'gothic', icon: '🖤', title: 'Gothic', description: 'Dark and mysterious gothic fashion' },
+                { id: 'cute', icon: '🌸', title: 'Cute', description: 'Adorable and kawaii style clothing' },
+                { id: 'punk', icon: '⚡', title: 'Punk', description: 'Rebellious and edgy punk rock style' },
+                { id: 'bohemian', icon: '🌿', title: 'Bohemian', description: 'Free-spirited and artistic boho style' },
+                { id: 'streetwear', icon: '🛹', title: 'Streetwear', description: 'Urban and trendy street fashion' },
+                { id: 'loungewear', icon: '🛋️', title: 'Loungewear', description: 'Comfortable home and relaxation wear' }
             ];
             
             let content = '<div class="options-grid icon-grid">';
-            personalities.forEach(personality => {
-                const selected = characterData.personality === personality.id ? 'selected' : '';
+            outfits.forEach(outfit => {
+                const selected = characterData.outfit === outfit.id ? 'selected' : '';
                 content += `
-                    <div class="option-card icon-card ${selected}" onclick="selectPersonality('${personality.id}')">
-                        <div class="option-icon">${personality.icon}</div>
-                        <div class="option-title">${personality.title}</div>
-                        <div class="option-description">${personality.description}</div>
+                    <div class="option-card icon-card ${selected}" onclick="selectOutfit('${outfit.id}')">
+                        <div class="option-icon">${outfit.icon}</div>
+                        <div class="option-title">${outfit.title}</div>
+                        <div class="option-description">${outfit.description}</div>
                     </div>
                 `;
             });
@@ -1589,31 +1879,31 @@
             return content;
         }
 
-        // 获取关系选择内容
-        function getRelationshipContent() {
-            const relationships = [
-                { id: 'stranger', icon: '🕶️', title: 'Stranger', description: 'Someone you just met' },
-                { id: 'school_mate', icon: '🎓', title: 'School Mate', description: 'Classmate or study partner' },
-                { id: 'colleague', icon: '💼', title: 'Colleague', description: 'Work partner or professional acquaintance' },
-                { id: 'mentor', icon: '💎', title: 'Mentor', description: 'Wise guide and teacher' },
-                { id: 'girlfriend', icon: '❤️', title: 'Girlfriend', description: 'Romantic partner and lover' },
-                { id: 'sex_friend', icon: '♂️', title: 'Sex Friend', description: 'Physical relationship without commitment' },
-                { id: 'wife', icon: '💍', title: 'Wife', description: 'Married partner for life' },
-                { id: 'mistress', icon: '👸', title: 'Mistress', description: 'Secret romantic relationship' },
-                { id: 'friend', icon: '🤝', title: 'Friend', description: 'Close companion and confidant' },
-                { id: 'best_friend', icon: '🤜', title: 'Best Friend', description: 'Closest friend who knows everything' },
-                { id: 'step_sister', icon: '💛', title: 'Step Sister', description: 'Family member through marriage' },
-                { id: 'step_mom', icon: '💖', title: 'Step Mom', description: 'Maternal figure through marriage' }
+        // 获取背景场景选择内容
+        function getBackgroundContent() {
+            const backgrounds = [
+                { id: 'beach', icon: '🏖️', title: 'Beach', description: 'Sunny beach with ocean waves and palm trees' },
+                { id: 'city', icon: '🌆', title: 'City', description: 'Urban cityscape with skyscrapers and lights' },
+                { id: 'forest', icon: '🌲', title: 'Forest', description: 'Peaceful forest with trees and nature' },
+                { id: 'office', icon: '🏢', title: 'Office', description: 'Professional office environment' },
+                { id: 'home', icon: '🏠', title: 'Home', description: 'Cozy home interior with comfortable furniture' },
+                { id: 'cafe', icon: '☕', title: 'Cafe', description: 'Charming cafe with coffee and pastries' },
+                { id: 'gym', icon: '💪', title: 'Gym', description: 'Modern fitness center with equipment' },
+                { id: 'school', icon: '🎓', title: 'School', description: 'Educational campus environment' },
+                { id: 'party', icon: '🎉', title: 'Party', description: 'Vibrant party scene with music and lights' },
+                { id: 'garden', icon: '🌺', title: 'Garden', description: 'Beautiful garden with flowers and plants' },
+                { id: 'mountain', icon: '⛰️', title: 'Mountain', description: 'Scenic mountain landscape with peaks' },
+                { id: 'nightclub', icon: '🕺', title: 'Nightclub', description: 'Energetic nightclub with dance floor' }
             ];
             
             let content = '<div class="options-grid icon-grid">';
-            relationships.forEach(relationship => {
-                const selected = characterData.relationship === relationship.id ? 'selected' : '';
+            backgrounds.forEach(background => {
+                const selected = characterData.background === background.id ? 'selected' : '';
                 content += `
-                    <div class="option-card icon-card ${selected}" onclick="selectRelationship('${relationship.id}')">
-                        <div class="option-icon">${relationship.icon}</div>
-                        <div class="option-title">${relationship.title}</div>
-                        <div class="option-description">${relationship.description}</div>
+                    <div class="option-card icon-card ${selected}" onclick="selectBackground('${background.id}')">
+                        <div class="option-icon">${background.icon}</div>
+                        <div class="option-title">${background.title}</div>
+                        <div class="option-description">${background.description}</div>
                     </div>
                 `;
             });
@@ -1662,8 +1952,8 @@
                         plus_size: 'Plus Size', 
                         tall_slim: 'Tall & Slim' 
                     },
-                    personality: { caregiver: 'Caregiver', sage: 'Sage', innocent: 'Innocent', jester: 'Jester', temptress: 'Temptress', dominant: 'Dominant', submissive: 'Submissive', lover: 'Lover', nympho: 'Nympho', mean: 'Mean', confidant: 'Confidant', experimenter: 'Experimenter' },
-                    relationship: { stranger: 'Stranger', school_mate: 'School Mate', colleague: 'Colleague', mentor: 'Mentor', girlfriend: 'Girlfriend', sex_friend: 'Sex Friend', wife: 'Wife', mistress: 'Mistress', friend: 'Friend', best_friend: 'Best Friend', step_sister: 'Step Sister', step_mom: 'Step Mom' }
+                    outfit: { casual: 'Casual', elegant: 'Elegant', business: 'Business', sporty: 'Sporty', sexy: 'Sexy', vintage: 'Vintage', gothic: 'Gothic', cute: 'Cute', punk: 'Punk', bohemian: 'Bohemian', streetwear: 'Streetwear', loungewear: 'Loungewear' },
+                    background: { beach: 'Beach', city: 'City', forest: 'Forest', office: 'Office', home: 'Home', cafe: 'Cafe', gym: 'Gym', school: 'School', party: 'Party', garden: 'Garden', mountain: 'Mountain', nightclub: 'Nightclub' }
                 };
                 return mappings[key] && mappings[key][value] ? mappings[key][value] : value;
             };
@@ -1685,8 +1975,8 @@
                             <span class="summary-value">${characterData.age}</span>
                         </div>
                         <div class="summary-item">
-                            <span class="summary-label">Relationship:</span>
-                            <span class="summary-value">${getDisplayValue('relationship', characterData.relationship)}</span>
+                            <span class="summary-label">Background:</span>
+                            <span class="summary-value">${getDisplayValue('background', characterData.background)}</span>
                         </div>
                     </div>
                     
@@ -1705,8 +1995,8 @@
                             <span class="summary-value">${getDisplayValue('bodyType', characterData.bodyType)}</span>
                         </div>
                         <div class="summary-item">
-                            <span class="summary-label">Personality:</span>
-                            <span class="summary-value">${getDisplayValue('personality', characterData.personality)}</span>
+                            <span class="summary-label">Outfit:</span>
+                            <span class="summary-value">${getDisplayValue('outfit', characterData.outfit)}</span>
                         </div>
                     </div>
                     
@@ -1733,12 +2023,12 @@
                             <span class="summary-value" style="color: ${characterData.bodyType ? '#4CAF50' : '#ed7f8c'}">${characterData.bodyType ? '✓ Selected' : '✗ Required'}</span>
                         </div>
                         <div class="summary-item">
-                            <span class="summary-label">Personality:</span>
-                            <span class="summary-value" style="color: ${characterData.personality ? '#4CAF50' : '#ed7f8c'}">${characterData.personality ? '✓ Selected' : '✗ Required'}</span>
+                            <span class="summary-label">Outfit:</span>
+                            <span class="summary-value" style="color: ${characterData.outfit ? '#4CAF50' : '#ed7f8c'}">${characterData.outfit ? '✓ Selected' : '✗ Required'}</span>
                         </div>
                         <div class="summary-item">
-                            <span class="summary-label">Relationship:</span>
-                            <span class="summary-value" style="color: ${characterData.relationship ? '#4CAF50' : '#ed7f8c'}">${characterData.relationship ? '✓ Selected' : '✗ Required'}</span>
+                            <span class="summary-label">Background:</span>
+                            <span class="summary-value" style="color: ${characterData.background ? '#4CAF50' : '#ed7f8c'}">${characterData.background ? '✓ Selected' : '✗ Required'}</span>
                         </div>
                     </div>
                     
@@ -1772,7 +2062,9 @@
 
         function selectHairColor(color) {
             characterData.hairColor = color;
-            document.querySelectorAll('.color-option').forEach(option => option.classList.remove('selected'));
+            // 只移除发色选择器中的选中状态
+            const hairColorContainer = event.target.closest('.color-selector');
+            hairColorContainer.querySelectorAll('.color-option').forEach(option => option.classList.remove('selected'));
             event.target.classList.add('selected');
         }
 
@@ -1780,18 +2072,20 @@
 
         function selectEyeColor(color) {
             characterData.eyeColor = color;
-            document.querySelectorAll('.color-option').forEach(option => option.classList.remove('selected'));
+            // 只移除眼色选择器中的选中状态
+            const eyeColorContainer = event.target.closest('.color-selector');
+            eyeColorContainer.querySelectorAll('.color-option').forEach(option => option.classList.remove('selected'));
             event.target.classList.add('selected');
         }
 
-        function selectPersonality(personality) {
-            characterData.personality = personality;
+        function selectOutfit(outfit) {
+            characterData.outfit = outfit;
             document.querySelectorAll('.option-card').forEach(card => card.classList.remove('selected'));
             event.target.closest('.option-card').classList.add('selected');
         }
 
-        function selectRelationship(relationship) {
-            characterData.relationship = relationship;
+        function selectBackground(background) {
+            characterData.background = background;
             document.querySelectorAll('.option-card').forEach(card => card.classList.remove('selected'));
             event.target.closest('.option-card').classList.add('selected');
         }
@@ -1865,8 +2159,8 @@
             if (!characterData.style) characterData.style = 'realistic';
             if (!characterData.ethnicity) characterData.ethnicity = 'asian';
             if (!characterData.bodyType) characterData.bodyType = 'petite';
-            if (!characterData.personality) characterData.personality = 'caregiver';
-            if (!characterData.relationship) characterData.relationship = 'stranger';
+            if (!characterData.outfit) characterData.outfit = 'casual';
+            if (!characterData.background) characterData.background = 'home';
             if (!characterData.hairColor) characterData.hairColor = 'black';
             if (!characterData.eyeColor) characterData.eyeColor = 'dark_brown';
             
@@ -1942,41 +2236,41 @@
             const randomImage = characterImages[Math.floor(Math.random() * characterImages.length)];
             
             // 生成角色描述
-            const personalityMap = {
-                'caregiver': 'Nurturing and caring',
-                'sage': 'Wise and thoughtful',
-                'innocent': 'Optimistic and pure',
-                'jester': 'Playful and humorous',
-                'temptress': 'Flirtatious and alluring',
-                'dominant': 'Assertive and commanding',
-                'submissive': 'Gentle and yielding',
-                'lover': 'Romantic and affectionate',
-                'nympho': 'Passionate and intense',
-                'mean': 'Cold and dismissive',
-                'confidant': 'Trustworthy and supportive',
-                'experimenter': 'Curious and adventurous'
+            const outfitMap = {
+                'casual': 'casually dressed',
+                'elegant': 'elegantly dressed',
+                'business': 'professionally dressed',
+                'sporty': 'sporty and athletic',
+                'sexy': 'alluring and sexy',
+                'vintage': 'vintage styled',
+                'gothic': 'gothic styled',
+                'cute': 'adorably cute',
+                'punk': 'punk rock styled',
+                'bohemian': 'bohemian styled',
+                'streetwear': 'street fashion styled',
+                'loungewear': 'comfortably dressed'
             };
             
-            const relationshipMap = {
-                'stranger': 'someone you just met',
-                'school_mate': 'your classmate and study partner',
-                'colleague': 'your work partner',
-                'mentor': 'your wise guide and teacher',
-                'girlfriend': 'your loving girlfriend',
-                'sex_friend': 'your intimate friend',
-                'wife': 'your devoted wife',
-                'mistress': 'your secret lover',
-                'friend': 'your close friend',
-                'best_friend': 'your closest confidant',
-                'step_sister': 'your step sister',
-                'step_mom': 'your step mother'
+            const backgroundMap = {
+                'beach': 'at the beach',
+                'city': 'in the city',
+                'forest': 'in the forest',
+                'office': 'at the office',
+                'home': 'at home',
+                'cafe': 'at a cafe',
+                'gym': 'at the gym',
+                'school': 'at school',
+                'party': 'at a party',
+                'garden': 'in the garden',
+                'mountain': 'in the mountains',
+                'nightclub': 'at a nightclub'
             };
             
             const styleText = characterData.style === 'realistic' ? 'realistic' : 'anime-style';
-            const personalityText = personalityMap[characterData.personality] || characterData.personality;
-            const relationshipText = relationshipMap[characterData.relationship] || characterData.relationship;
+            const outfitText = outfitMap[characterData.outfit] || characterData.outfit;
+            const backgroundText = backgroundMap[characterData.background] || characterData.background;
             
-            const description = `Meet ${characterData.name}, your new ${styleText} AI companion! She's a ${characterData.age}-year-old ${personalityText} character who will be ${relationshipText}. Her ${characterData.hairColor} hair and ${characterData.eyeColor} eyes perfectly complement her ${characterData.bodyType} figure.`;
+            const description = `Meet ${characterData.name}, your new ${styleText} AI companion! She's a ${characterData.age}-year-old character who is ${outfitText} and can be found ${backgroundText}. Her ${characterData.hairColor} hair and ${characterData.eyeColor} eyes perfectly complement her ${characterData.bodyType} figure.`;
             
             return {
                 image: randomImage,
@@ -2016,7 +2310,30 @@
             resultName.textContent = resultData.name;
             resultDescription.textContent = resultData.description;
             
+            // 填充详细信息
+            fillCharacterDetails();
+            
             modal.classList.add('active');
+        }
+
+        // 填充角色详细信息
+        function fillCharacterDetails() {
+            const styleMap = { realistic: 'Realistic', anime: 'Anime' };
+            const ethnicityMap = { asian: 'Asian', caucasian: 'Caucasian', african: 'African', latina: 'Latina', middle_eastern: 'Middle Eastern', mixed: 'Mixed' };
+            const hairColorMap = { black: 'Black', brown: 'Brown', blonde: 'Blonde', red: 'Red', gray: 'Gray', white: 'White' };
+            const eyeColorMap = { dark_brown: 'Dark Brown', light_brown: 'Light Brown', blue: 'Blue', green: 'Green', gray: 'Gray', hazel: 'Hazel' };
+            const bodyTypeMap = { petite: 'Petite', slim: 'Slim', athletic: 'Athletic', curvy: 'Curvy', plus_size: 'Plus Size' };
+            const outfitMap = { casual: 'Casual', elegant: 'Elegant', business: 'Business', sporty: 'Sporty', sexy: 'Sexy', vintage: 'Vintage', gothic: 'Gothic', cute: 'Cute', punk: 'Punk', bohemian: 'Bohemian', streetwear: 'Streetwear', loungewear: 'Loungewear' };
+            const backgroundMap = { beach: 'Beach', city: 'City', forest: 'Forest', office: 'Office', home: 'Home', cafe: 'Cafe', gym: 'Gym', school: 'School', party: 'Party', garden: 'Garden', mountain: 'Mountain', nightclub: 'Nightclub' };
+            
+            document.getElementById('resultAge').textContent = characterData.age;
+            document.getElementById('resultStyle').textContent = styleMap[characterData.style] || characterData.style;
+            document.getElementById('resultEthnicity').textContent = ethnicityMap[characterData.ethnicity] || characterData.ethnicity;
+            document.getElementById('resultHairColor').textContent = hairColorMap[characterData.hairColor] || characterData.hairColor;
+            document.getElementById('resultEyeColor').textContent = eyeColorMap[characterData.eyeColor] || characterData.eyeColor;
+            document.getElementById('resultBodyType').textContent = bodyTypeMap[characterData.bodyType] || characterData.bodyType;
+            document.getElementById('resultOutfit').textContent = outfitMap[characterData.outfit] || characterData.outfit;
+            document.getElementById('resultBackground').textContent = backgroundMap[characterData.background] || characterData.background;
         }
 
         // 关闭结果模态框
@@ -2025,10 +2342,40 @@
             modal.classList.remove('active');
         }
 
-        // 开始聊天
-        function chatWithCharacter() {
+        // 生成角色图片
+        function generateCharacterImage() {
             closeResult();
-            window.location.href = `chat.html?character=${encodeURIComponent(characterData.name)}`;
+            // 获取当前显示的角色图片
+            const resultImage = document.getElementById('resultImage');
+            const imageUrl = resultImage.src;
+            
+            // 创建包含图片URL的角色数据
+            const characterDataWithImage = {
+                ...characterData,
+                image: imageUrl
+            };
+            
+            // 跳转到生成页面，并传递角色数据
+            const characterParams = encodeURIComponent(JSON.stringify(characterDataWithImage));
+            window.location.href = `generate.html?character=${characterParams}&mode=image`;
+        }
+
+        // 生成角色视频
+        function generateCharacterVideo() {
+            closeResult();
+            // 获取当前显示的角色图片
+            const resultImage = document.getElementById('resultImage');
+            const imageUrl = resultImage.src;
+            
+            // 创建包含图片URL的角色数据
+            const characterDataWithImage = {
+                ...characterData,
+                image: imageUrl
+            };
+            
+            // 跳转到生成页面，并传递角色数据
+            const characterParams = encodeURIComponent(JSON.stringify(characterDataWithImage));
+            window.location.href = `generate.html?character=${characterParams}&mode=video`;
         }
 
         // 创建另一个角色
@@ -2042,8 +2389,8 @@
                 hairColor: 'black',           // 默认选择第一项：Black
                 eyeColor: 'dark_brown',       // 默认选择第一项：Dark Brown
                 bodyType: 'petite',           // 默认选择第一项：Petite
-                personality: 'caregiver',     // 默认选择第一项：Caregiver
-                relationship: 'stranger',     // 默认选择第一项：Stranger
+                outfit: 'casual',             // 默认选择第一项：Casual
+                background: 'home',           // 默认选择第一项：Home
                 name: 'Luna'                  // 默认角色名
             };
             // 回到第一步
@@ -2077,26 +2424,45 @@
             img.src = imageUrl;
         }
 
-        // 导航功能
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const text = this.querySelector('.text').textContent;
-                
-                if (text === 'Explore') {
+        // 导航点击事件处理函数
+        function handleNavigation(navType) {
+            if (navType === 'explore') {
                     window.location.href = './index.html';
-                } else if (text === 'Chat') {
-                    window.location.href = './chat.html';
-                } else if (text === 'Dashboard') {
+            } else if (navType === 'chat') {
+                alert('Chat feature is temporarily unavailable. Please try other features!');
+            } else if (navType === 'dashboard') {
                     window.location.href = './dashboard.html';
-                } else if (text === 'Create') {
+            } else if (navType === 'create') {
                     // 当前页面
                     return;
-                } else if (text === 'Generate') {
+            } else if (navType === 'generate') {
                     window.location.href = './generate.html';
-                    return;
-                } else {
-                    alert(`Navigate to ${text} page\n(功能开发中)`);
-                }
+            }
+        }
+
+        // 左侧导航栏点击事件
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const text = this.querySelector('.text').textContent.toLowerCase();
+                handleNavigation(text);
+            });
+        });
+        
+        // 顶部导航栏点击事件
+        document.querySelectorAll('.top-nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const navType = this.getAttribute('data-nav');
+                
+                // Remove active state from other top nav items
+                document.querySelectorAll('.top-nav-item').forEach(nav => {
+                    nav.classList.remove('active');
+                });
+                
+                // Add active state to current item
+                this.classList.add('active');
+                
+                // Handle navigation
+                handleNavigation(navType);
             });
         });
     </script>

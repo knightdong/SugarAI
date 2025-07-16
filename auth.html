@@ -215,58 +215,7 @@
             transform: none;
         }
 
-        .divider {
-            text-align: center;
-            margin: 25px 0;
-            position: relative;
-            color: #888;
-            font-size: 14px;
-        }
 
-        .divider::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: rgba(255, 255, 255, 0.1);
-            z-index: 1;
-        }
-
-        .divider span {
-            background: #212121;
-            padding: 0 15px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .social-login {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .social-btn {
-            flex: 1;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-size: 14px;
-        }
-
-        .social-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: #ed7f8c;
-        }
 
         .auth-footer {
             text-align: center;
@@ -339,10 +288,6 @@
 
             .logo h1 {
                 font-size: 28px;
-            }
-
-            .social-login {
-                flex-direction: column;
             }
         }
 
@@ -499,18 +444,7 @@
             </button>
         </form>
 
-        <div class="divider">
-            <span>or continue with</span>
-        </div>
 
-        <div class="social-login">
-            <button class="social-btn" onclick="socialLogin('google')">
-                <span>🔍</span> Google
-            </button>
-            <button class="social-btn" onclick="socialLogin('facebook')">
-                <span>📘</span> Facebook
-            </button>
-        </div>
 
         <div class="auth-footer">
             <p>By continuing, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
@@ -731,10 +665,7 @@
             }, 2000);
         }
 
-        // Social login
-        function socialLogin(provider) {
-            showError(`${provider} login integration coming soon!`);
-        }
+
 
         // Forgot password modal
         function openForgotPassword() {
