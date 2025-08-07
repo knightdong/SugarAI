@@ -215,6 +215,49 @@
             transform: none;
         }
 
+        /* 验证码相关样式 */
+        .verification-group {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .verification-input {
+            flex: 1;
+        }
+
+        .send-code-btn {
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            min-width: 120px;
+        }
+
+        .send-code-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, #45a049, #3d8b40);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .send-code-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: linear-gradient(135deg, #666, #555);
+        }
+
+        .countdown {
+            color: #888;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
 
 
         .auth-footer {
@@ -288,6 +331,15 @@
 
             .logo h1 {
                 font-size: 28px;
+            }
+
+            .verification-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .send-code-btn {
+                width: 100%;
             }
         }
 
@@ -413,6 +465,17 @@
             </div>
             
             <div class="form-group">
+                <label class="form-label" for="verification-code">Verification Code</label>
+                <div class="verification-group">
+                    <input type="text" id="verification-code" class="form-input verification-input" placeholder="Enter 6-digit code" maxlength="6" pattern="[0-9]{6}" required>
+                    <button type="button" class="send-code-btn" id="send-code-btn" onclick="sendVerificationCode()">
+                        <span class="btn-text">Send Code</span>
+                    </button>
+                </div>
+                <div class="countdown" id="countdown"></div>
+            </div>
+
+            <div class="form-group">
                 <label class="form-label" for="register-password">Password</label>
                 <div class="password-group">
                     <input type="password" id="register-password" class="form-input" placeholder="Create a password" required minlength="8">
@@ -473,6 +536,10 @@
     </div>
 
     <script>
+        // 全局变量
+        let countdownTimer = null;
+        let verificationCode = null;
+
         // Tab switching
         document.querySelectorAll('.auth-tab').forEach(tab => {
             tab.addEventListener('click', () => {
@@ -503,6 +570,77 @@
                 input.type = 'password';
                 button.textContent = '👁️';
             }
+        }
+
+        // 发送验证码功能
+        function sendVerificationCode() {
+            const email = document.getElementById('register-email').value;
+            const sendBtn = document.getElementById('send-code-btn');
+            const countdownEl = document.getElementById('countdown');
+            
+            if (!validateEmail(email)) {
+                showError('Please enter a valid email address first');
+                return;
+            }
+            
+            // 禁用按钮并显示加载状态
+            sendBtn.disabled = true;
+            sendBtn.querySelector('.btn-text').innerHTML = '<div class="loading"></div>';
+            
+            // 发送验证码请求
+            const host = 'http://localhost:8000';
+            const url = `${host}/api/account/vcode?username=${encodeURIComponent(email)}`;
+            
+            // 使用fetch发送请求
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Verification code response:', data);
+                
+                // 检查响应状态 - 使用HTTP状态码
+                showSuccess(`Verification code sent to ${email}`);
+                startCountdown();
+            })
+            .catch(error => {
+                console.error('Error sending verification code:', error);
+                showError(error.message || 'Failed to send verification code. Please try again.');
+            })
+            .finally(() => {
+                // 恢复按钮状态
+                sendBtn.disabled = false;
+                sendBtn.querySelector('.btn-text').textContent = 'Send Code';
+            });
+        }
+
+        // 倒计时功能
+        function startCountdown() {
+            let countdown = 60;
+            const sendBtn = document.getElementById('send-code-btn');
+            const countdownEl = document.getElementById('countdown');
+            
+            sendBtn.disabled = true;
+            
+            countdownTimer = setInterval(() => {
+                countdownEl.textContent = `Resend available in ${countdown} seconds`;
+                countdown--;
+                
+                if (countdown < 0) {
+                    clearInterval(countdownTimer);
+                    sendBtn.disabled = false;
+                    countdownEl.textContent = '';
+                }
+            }, 1000);
         }
 
         // Password strength checker
@@ -560,12 +698,18 @@
             e.preventDefault();
             
             const email = document.getElementById('register-email').value;
+            const code = document.getElementById('verification-code').value;
             const password = document.getElementById('register-password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
             const agreeTerms = document.getElementById('agree-terms').checked;
             
             if (!validateEmail(email)) {
                 showError('Please enter a valid email address');
+                return;
+            }
+            
+            if (!code || code.length !== 6) {
+                showError('Please enter a valid 6-digit verification code');
                 return;
             }
             
@@ -584,7 +728,15 @@
                 return;
             }
             
-            submitForm('register', { email, password });
+            // 验证码验证将通过服务器进行，这里只做格式检查
+            submitForm('register', { 
+                username: email, // username参数传邮箱
+                password, 
+                repassword: confirmPassword,
+                name: email.split('@')[0], // 使用邮箱前缀作为姓名
+                email, 
+                vcode: code 
+            });
         });
 
         document.getElementById('forgot-form').addEventListener('submit', function(e) {
@@ -608,19 +760,41 @@
                 btn.querySelector('.btn-text').innerHTML = '<div class="loading"></div>';
             });
             
-            // Simulate API call
-            setTimeout(() => {
-                if (type === 'login') {
-                    // Mock login success
+            const host = 'http://localhost:8000';
+            
+            if (type === 'login') {
+                // 登录请求
+                const loginData = {
+                    username: data.email, // username参数传邮箱地址
+                    password: data.password
+                };
+                
+                fetch(`${host}/api/account/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(loginData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Login response:', data);
+                    
+                    // 存储用户数据 - HTTP状态码200表示成功
                     const userData = {
-                        name: data.email.split('@')[0], // Use email prefix as name
-                        email: data.email,
-                        membershipType: 'Premium Member',
-                        gemBalance: '1,250',
-                        token: 'demo-token-' + Date.now()
+                        name: data.user?.name || data.email?.split('@')[0] || data.principal?.name || data.principal?.username?.split('@')[0] || 'User',
+                        email: data.email || data.principal?.email || data.principal?.username || '',
+                        membershipType: data.user?.membershipType || 'Premium Member',
+                        gemBalance: data.user?.gemBalance || '1,250',
+                        token: data.token || data.name || 'demo-token-' + Date.now()
                     };
                     
-                    // Store user data
                     localStorage.setItem('token', userData.token);
                     localStorage.setItem('userData', JSON.stringify(userData));
                     
@@ -628,17 +802,52 @@
                     setTimeout(() => {
                         window.location.href = './index.html';
                     }, 1500);
-                } else if (type === 'register') {
-                    // Mock registration success - auto login
+                })
+                .catch(error => {
+                    console.error('Login error:', error);
+                    showError(error.message || 'Login failed. Please check your credentials.');
+                })
+                .finally(() => {
+                    resetButtons(buttons, 'login');
+                });
+                
+            } else if (type === 'register') {
+                // 注册请求
+                const registerData = {
+                    username: data.username,
+                    password: data.password,
+                    repassword: data.repassword,
+                    name: data.name,
+                    email: data.email,
+                    vcode: data.vcode
+                };
+                
+                fetch(`${host}/api/account/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(registerData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Register response:', data);
+                    
+                    // 存储用户数据 - HTTP状态码200表示成功
                     const userData = {
-                        name: data.email.split('@')[0], // Use email prefix as name
-                        email: data.email,
-                        membershipType: 'Free Member',
-                        gemBalance: '500', // Welcome bonus
-                        token: 'demo-token-' + Date.now()
+                        name: data.user?.name || data.email?.split('@')[0] || data.principal?.name || data.principal?.username?.split('@')[0] || 'User',
+                        email: data.email || data.principal?.email || data.principal?.username || '',
+                        membershipType: data.user?.membershipType || 'Free Member',
+                        gemBalance: data.user?.gemBalance || '500',
+                        token: data.token || data.name || 'demo-token-' + Date.now()
                     };
                     
-                    // Store user data for auto-login
                     localStorage.setItem('token', userData.token);
                     localStorage.setItem('userData', JSON.stringify(userData));
                     
@@ -646,23 +855,67 @@
                     setTimeout(() => {
                         window.location.href = './index.html';
                     }, 2000);
-                } else if (type === 'forgot') {
-                    // Mock password reset
+                })
+                .catch(error => {
+                    console.error('Register error:', error);
+                    showError(error.message || 'Registration failed. Please try again.');
+                })
+                .finally(() => {
+                    resetButtons(buttons, 'register');
+                });
+                
+            } else if (type === 'forgot') {
+                // 忘记密码请求
+                const forgotData = {
+                    email: data.email
+                };
+                
+                fetch(`${host}/api/account/forgot-password`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(forgotData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Forgot password response:', data);
+                    
                     showSuccess('Password reset link sent to your email!');
                     setTimeout(() => {
                         closeForgotPassword();
                     }, 2000);
-                }
-                
-                // Reset buttons
-                buttons.forEach(btn => {
-                    btn.disabled = false;
-                    const originalText = btn.closest('form').id.includes('login') ? 'Sign In' : 
-                                       btn.closest('form').id.includes('register') ? 'Create Account' : 
-                                       'Send Reset Link';
-                    btn.querySelector('.btn-text').textContent = originalText;
+                })
+                .catch(error => {
+                    console.error('Forgot password error:', error);
+                    showError(error.message || 'Failed to send reset link. Please try again.');
+                })
+                .finally(() => {
+                    resetButtons(buttons, 'forgot');
                 });
-            }, 2000);
+            }
+        }
+
+        // 重置按钮状态
+        function resetButtons(buttons, type) {
+            buttons.forEach(btn => {
+                btn.disabled = false;
+                let originalText = '';
+                if (type === 'login') {
+                    originalText = 'Sign In';
+                } else if (type === 'register') {
+                    originalText = 'Create Account';
+                } else if (type === 'forgot') {
+                    originalText = 'Send Reset Link';
+                }
+                btn.querySelector('.btn-text').textContent = originalText;
+            });
         }
 
 
@@ -713,6 +966,11 @@
             if (e.target === this) {
                 closeForgotPassword();
             }
+        });
+
+        // 验证码输入框只允许数字
+        document.getElementById('verification-code').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
         });
     </script>
 </body>

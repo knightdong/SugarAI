@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #212121 0%, #1a1a1a 100%);
+            background: #0a0a0a;
             color: #ffffff;
             overflow-x: hidden;
         }
@@ -26,7 +26,7 @@
         /* 左侧导航栏 */
         .sidebar {
             width: 280px;
-            background: linear-gradient(180deg, #2a2a2a 0%, #1e1e1e 100%);
+            background: linear-gradient(180deg, #1a1a1a 0%, #0f0f0f 100%);
             position: fixed;
             height: 100vh;
             left: 0;
@@ -429,8 +429,8 @@
 
         /* 人种图片样式 */
         .option-card.icon-card .option-image {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -521,10 +521,10 @@
         /* 颜色选择器 */
         .color-selector {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: 20px;
             margin: 20px 0;
-            max-width: 600px;
+            max-width: 400px;
             justify-content: center;
         }
 
@@ -533,7 +533,6 @@
             height: 70px;
             border-radius: 50%;
             border: 3px solid #444;
-            cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
             margin: 0 auto;
@@ -546,19 +545,27 @@
 
         .color-option.selected {
             border-color: #ed7f8c;
-            box-shadow: 0 0 0 3px rgba(237, 127, 140, 0.3);
+            box-shadow: 0 0 0 3px rgba(237, 127, 140, 0.3), 0 0 20px rgba(237, 127, 140, 0.5), 0 0 40px rgba(237, 127, 140, 0.3);
+            transform: scale(1.05);
         }
 
-        .color-option.selected::after {
-            content: '✓';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-size: 20px;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        /* 颜色选项包装器 */
+        .color-option-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            position: relative;
+            z-index: 1;
+        }
+
+        .color-option-label {
+            font-size: 12px;
+            color: #ffffff;
+            text-align: center;
+            font-weight: 500;
+            margin-top: 4px;
         }
 
         /* 滑块控制器 */
@@ -624,6 +631,7 @@
             margin-top: 30px;
             padding: 0 20px;
             box-sizing: border-box;
+            gap: 20px;
         }
 
         .btn-nav {
@@ -635,6 +643,10 @@
             transition: all 0.3s ease;
             border: none;
             min-width: 120px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .btn-previous {
@@ -667,7 +679,7 @@
         /* 总结页面 */
         .summary-container {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-columns: 1fr 1fr;
             gap: 20px;
             margin: 30px 0;
         }
@@ -1061,10 +1073,10 @@
             left: 0;
             right: 0;
             height: 60px;
-            background: linear-gradient(180deg, #2a2a2a 0%, #1e1e1e 100%);
+            background: linear-gradient(180deg, #1a1a1a 0%, #0f0f0f 100%);
             border-bottom: 1px solid #333;
             z-index: 1001;
-            padding: 0 20px;
+            padding: 0 15px;
             align-items: center;
             justify-content: space-between;
         }
@@ -1085,18 +1097,21 @@
         .top-nav-menu {
             display: flex;
             align-items: center;
-            gap: 5px;
+            flex: 1;
+            justify-content: space-between;
+            gap: 2px;
         }
 
         .top-nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 8px 10px;
+            padding: 8px 4px;
             cursor: pointer;
             transition: all 0.3s ease;
             border-radius: 8px;
-            min-width: 60px;
+            flex: 1;
+            min-width: 0;
         }
 
         .top-nav-item:hover {
@@ -1126,7 +1141,8 @@
         .top-nav-user {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            flex-shrink: 0;
         }
 
         .top-nav-avatar {
@@ -1159,129 +1175,255 @@
                 display: flex;
             }
             
+            .top-nav-logo {
+                display: none;
+            }
+            
+            .top-nav-menu {
+                gap: 2px;
+            }
+            
+            .top-nav-item {
+                padding: 6px 2px;
+                min-width: 0;
+            }
+            
+            .top-nav-item .icon {
+                font-size: 15px;
+            }
+            
+            .top-nav-item .text {
+                font-size: 10px;
+            }
+            
             .main-content {
                 margin-left: 0;
-                padding: 80px 15px 15px 15px;
-                width: 100vw;
-                height: 100vh;
-            }
-            
-            .content-title {
-                font-size: 24px;
-            }
-            
-            .step-container {
-                padding: 25px;
-                flex: 1;
-            }
-            
-            .step-title {
-                font-size: 24px;
-            }
-            
-            .options-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-            
-            .color-selector {
-                grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
-                gap: 10px;
-            }
-            
-            .color-option {
-                width: 50px;
-                height: 50px;
-            }
-            
-            .age-selector {
-                gap: 15px;
-            }
-            
-            .age-input {
-                width: 60px;
-                height: 50px;
-                font-size: 20px;
-            }
-            
-            .age-btn {
-                width: 35px;
-                height: 35px;
-                font-size: 16px;
-            }
-            
-            .progress-bar {
-                gap: 10px;
-            }
-            
-            .progress-step {
-                width: 35px;
-                height: 35px;
-                font-size: 14px;
-                font-weight: 700;
-            }
-            
-            .progress-line {
-                width: 40px;
-            }
-            
-            .step-navigation {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .btn-nav {
-                width: 100%;
-                padding: 12px 20px;
-                font-size: 14px;
-            }
-            
-            .summary-container {
-                grid-template-columns: 1fr;
-                gap: 15px;
+                padding-top: 60px;
+                padding-right: 20px;
             }
         }
 
         @media (max-width: 480px) {
-            .main-content {
-                padding: 70px 10px 10px 10px;
-                width: 100vw;
-                height: 100vh;
+            .top-nav {
+                padding: 0 8px;
             }
             
-            .step-container {
-                padding: 20px;
-                flex: 1;
+            .top-nav-menu {
+                gap: 1px;
             }
             
-            .option-card {
-                padding: 15px;
+            .top-nav-item {
+                padding: 5px 1px;
+                min-width: 0;
             }
             
-            .option-icon {
-                font-size: 36px;
+            .top-nav-item .icon {
+                font-size: 14px;
             }
             
-            .option-title {
-                font-size: 16px;
+            .top-nav-item .text {
+                font-size: 9px;
             }
             
-            .option-description {
+            .top-nav-avatar {
+                width: 28px;
+                height: 28px;
                 font-size: 12px;
             }
             
-            .color-selector {
-                grid-template-columns: repeat(4, 1fr);
+            .top-nav-gems {
+                font-size: 11px;
             }
-            
-            .color-option {
-                width: 40px;
-                height: 40px;
-            }
-            
-
         }
 
+        .top-nav-logo {
+            display: flex;
+        }
+        @media (max-width: 768px) {
+            .top-nav-logo {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .progress-bar {
+                overflow-x: unset;
+                display: flex;
+                flex-wrap: nowrap;
+                gap: 4px;
+                padding-bottom: 6px;
+                margin: 0 2px;
+            }
+            .progress-step {
+                flex: 0 0 auto;
+                min-width: 26px;
+                min-height: 26px;
+                width: 26px;
+                height: 26px;
+                font-size: 12px;
+            }
+            .progress-line {
+                flex: 0 0 18px;
+                min-width: 10px;
+                height: 2px;
+            }
+
+            .step-navigation {
+                gap: 15px;
+                padding: 0 15px;
+            }
+
+            .btn-nav {
+                padding: 12px 20px;
+                font-size: 14px;
+                min-width: 100px;
+                height: 45px;
+            }
+
+            .step-container {
+                padding: 20px;
+            }
+
+            .step-title {
+                font-size: 24px;
+            }
+
+            .step-subtitle {
+                font-size: 14px;
+                margin-bottom: 30px;
+            }
+
+            /* 第2步人种选择在移动端每行显示2个 */
+            .options-grid.icon-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .option-card.icon-card {
+                padding: 15px;
+                min-height: 150px;
+            }
+
+            .option-card.icon-card .option-image {
+                width: 80px;
+                height: 80px;
+                margin-bottom: 10px;
+            }
+
+            .option-card.icon-card .option-title {
+                font-size: 16px;
+                margin-bottom: 5px;
+            }
+
+            .option-card.icon-card .option-description {
+                font-size: 12px;
+            }
+
+            /* 第3步颜色选择器移动端优化 */
+            .color-selector {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 15px;
+                max-width: 100%;
+                margin: 15px 0;
+            }
+
+            .color-option {
+                width: 60px;
+                height: 60px;
+            }
+
+            .color-option-label {
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .step-navigation {
+                gap: 12px;
+                padding: 0 10px;
+            }
+
+            .btn-nav {
+                padding: 10px 16px;
+                font-size: 13px;
+                min-width: 90px;
+                height: 42px;
+            }
+
+            .step-container {
+                padding: 15px;
+            }
+
+            .step-title {
+                font-size: 20px;
+            }
+
+            .step-subtitle {
+                font-size: 13px;
+                margin-bottom: 25px;
+            }
+
+            /* 第2步人种选择在更小屏幕上进一步优化 */
+            .options-grid.icon-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .option-card.icon-card {
+                padding: 12px;
+                min-height: 130px;
+            }
+
+            .option-card.icon-card .option-image {
+                width: 70px;
+                height: 70px;
+                margin-bottom: 8px;
+            }
+
+            .option-card.icon-card .option-title {
+                font-size: 14px;
+                margin-bottom: 4px;
+            }
+
+            .option-card.icon-card .option-description {
+                font-size: 11px;
+            }
+
+            /* 第3步颜色选择器小屏幕优化 */
+            .color-selector {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 12px;
+                max-width: 100%;
+                margin: 12px 0;
+            }
+
+            .color-option {
+                width: 50px;
+                height: 50px;
+            }
+
+            .color-option-label {
+                font-size: 10px;
+            }
+        }
+
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0f0f0f;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ed7f8c;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d16570;
+        }
 
     </style>
 </head>
@@ -1297,6 +1439,12 @@
                     <div class="icon">🔍</div>
                     <div class="text">Explore</div>
                 </div>
+                <!-- Chat功能暂时隐藏，后续开发
+                <div class="top-nav-item" data-nav="chat">
+                    <div class="icon">💬</div>
+                    <div class="text">Chat</div>
+                </div>
+                -->
                 <div class="top-nav-item active" data-nav="create">
                     <div class="icon">✨</div>
                     <div class="text">Create</div>
@@ -1331,10 +1479,12 @@
                     <div class="icon">🔍</div>
                     <div class="text">Explore</div>
                 </div>
-                <div class="nav-item" style="display: none;">
+                <!-- Chat功能暂时隐藏，后续开发
+                <div class="nav-item">
                     <div class="icon">💬</div>
                     <div class="text">Chat</div>
                 </div>
+                -->
                 <div class="nav-item active">
                     <div class="icon">✨</div>
                     <div class="text active">Create</div>
@@ -1458,10 +1608,12 @@
             
             <!-- 底部按钮区域 -->
             <div class="result-actions">
-                <button class="result-btn secondary" onclick="createAnother()">
-                    <span class="btn-icon">🔄</span>
-                    Recreate Character
+                <!-- Chat功能暂时隐藏，后续开发
+                <button class="result-btn secondary" onclick="chatWithCharacter()">
+                    <span class="btn-icon">💬</span>
+                    Chat with Her
                 </button>
+                -->
                 <button class="result-btn primary" onclick="generateCharacterImage()">
                     <span class="btn-icon">🎨</span>
                     Generate Image
@@ -1532,11 +1684,12 @@
             style: 'realistic',           // 默认选择第一项：Realistic
             ethnicity: 'asian',           // 默认选择第一项：Asian
             age: 22,
-            hairColor: 'black',           // 默认选择第一项：Black
-            eyeColor: 'dark_brown',       // 默认选择第一项：Dark Brown
+            hairStyle: 'chicMediumLengthHair', // 新增：默认发型
+            hairColor: 'jet_black',           // 默认选择第一项：Jet Black
+            eyeColor: 'black',       // 默认选择第一项：Black
             bodyType: 'petite',           // 默认选择第一项：Petite
             outfit: 'casual',             // 默认选择第一项：Casual
-            background: 'home',           // 默认选择第一项：Home
+            background: 'beach',           // 默认选择第一项：Beach
             name: 'Luna'                  // 默认角色名
         };
 
@@ -1586,6 +1739,8 @@
             
             initializeProgress();
             loadStep(1);
+            
+
         });
 
         // 初始化进度条
@@ -1687,6 +1842,17 @@
             container.innerHTML = content;
             updateProgress();
             updateNavigation();
+
+            // 新增：切换步骤时自动滚动到进度条
+            const progressContainer = document.querySelector('.progress-container');
+            if (progressContainer) {
+                progressContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            // 在第7步加载时自动填充提示词
+            if (stepNumber === 7) {
+                setTimeout(fillPromptTextarea, 100);
+            }
         }
 
         // 获取样式选择内容
@@ -1760,34 +1926,51 @@
 
         // 获取外观选择内容
         function getAppearanceContent() {
+            // 新增：发型图片与名称
+            const hairStyles = [
+                { id: 'shortHair', file: 'SHORT HAIR.jpg', name: 'Short Hair' },
+                { id: 'chicMediumLengthHair', file: 'CHIC MEDIUM LENGTH HAIR.png', name: 'Chic Medium Length Hair' },
+                { id: 'sleekBob', file: 'SLEEK BOB.png', name: 'Sleek Bob' },
+                { id: 'sleekHair', file: 'SLEEK HAIR.png', name: 'Sleek Hair' },
+                { id: 'straightSideBangs', file: 'STRAIGHT SIDE BANGS.png', name: 'Straight Side Bangs' },
+                { id: 'voluminousCurls', file: 'VOLUMINOUS CURLS.png', name: 'Voluminous Curls' },
+                { id: 'naturalWaves', file: 'NATURAL WAVES.png', name: 'Natural Waves' },
+                { id: 'stackedBob', file: 'STACKED BOB.png', name: 'Stacked Bob' }
+            ];
+            let content = '<div style="max-width: 900px; margin: 0 auto;">';
+            // Hair Style 选择器
+            content += '<div style="margin-bottom: 40px;"><h3 style="color: #ed7f8c; margin-bottom: 20px; text-align: center; font-size: 20px;">Hair Style</h3>';
+            content += '<div class="options-grid style-grid">';
+            hairStyles.forEach(style => {
+                const selected = characterData.hairStyle === style.id ? 'selected' : '';
+                content += `
+                    <div class="option-card ${selected}" onclick="selectHairStyle('${style.id}')" style="max-width:140px;min-width:100px;cursor:pointer;padding:10px;display:flex;flex-direction:column;align-items:center;">
+                        <div class="option-image" style="background-image: url('assets/hair styles/${style.file}');width:100px;height:100px;border-radius:12px;background-size:cover;background-position:center;aspect-ratio:1/1;"></div>
+                        <div class="option-title" style="font-size:15px;margin:10px 0 5px 0;line-height:1.2;padding:0 2px;min-height:28px;text-align:center;">${style.name}</div>
+                    </div>
+                `;
+            });
+            content += '</div></div>';
+            
             const hairColors = [
-                { id: 'black', color: '#1B1B1B', name: 'Black' },
-                { id: 'dark_brown', color: '#3B2F2F', name: 'Dark Brown' },
-                { id: 'brown', color: '#6B4423', name: 'Brown' },
-                { id: 'light_brown', color: '#8B6F47', name: 'Light Brown' },
-                { id: 'dirty_blonde', color: '#B89778', name: 'Dirty Blonde' },
-                { id: 'blonde', color: '#D4C194', name: 'Blonde' },
-                { id: 'strawberry_blonde', color: '#C7956D', name: 'Strawberry Blonde' },
-                { id: 'red', color: '#8B3103', name: 'Auburn Red' },
-                { id: 'light_red', color: '#B85450', name: 'Light Red' },
-                { id: 'gray', color: '#7D7D7D', name: 'Gray' },
-                { id: 'silver', color: '#C0C0C0', name: 'Silver' },
-                { id: 'white', color: '#F5F5F5', name: 'White' }
+                { id: 'jet_black', image: 'assets/hair colors/Jet Black.jpg', name: 'Jet Black' },
+                { id: 'natural_dark_brown', image: 'assets/hair colors/Natural Dark Brown.jpg', name: 'Natural Dark Brown' },
+                { id: 'soft_mahogany_brown', image: 'assets/hair colors/Soft Mahogany Brown.jpg', name: 'Soft Mahogany Brown' },
+                { id: 'golden_blonde', image: 'assets/hair colors/Golden Blonde.jpg', name: 'Golden Blonde' },
+                { id: 'platinum_blonde', image: 'assets/hair colors/Platinum Blonde.jpg', name: 'Platinum Blonde' },
+                { id: 'strawberry_blonde', image: 'assets/hair colors/Strawberry Blonde.jpg', name: 'Strawberry Blonde' },
+                { id: 'red_mahogany', image: 'assets/hair colors/Red Mahogany.jpg', name: 'Red Mahogany' },
+                { id: 'rose_red', image: 'assets/hair colors/Rose Red.jpg', name: 'Rose Red' }
             ];
             
             const eyeColors = [
-                { id: 'dark_brown', color: '#3E2723', name: 'Dark Brown' },
-                { id: 'brown', color: '#6D4C41', name: 'Brown' },
-                { id: 'hazel', color: '#8D6E63', name: 'Hazel' },
-                { id: 'amber', color: '#D2691E', name: 'Amber' },
-                { id: 'green', color: '#4CAF50', name: 'Green' },
-                { id: 'blue', color: '#2196F3', name: 'Blue' },
-                { id: 'light_blue', color: '#81D4FA', name: 'Light Blue' },
-                { id: 'gray', color: '#90A4AE', name: 'Gray' },
-                { id: 'violet', color: '#7B1FA2', name: 'Violet' }
+                { id: 'black', image: 'assets/eye colors/black.avif', name: 'Black' },
+                { id: 'brown', image: 'assets/eye colors/brown.avif', name: 'Brown' },
+                { id: 'blue', image: 'assets/eye colors/blue.avif', name: 'Blue' },
+                { id: 'green', image: 'assets/eye colors/green.avif', name: 'Green' },
+                { id: 'purple', image: 'assets/eye colors/purple.avif', name: 'Purple' },
+                { id: 'white', image: 'assets/eye colors/white.avif', name: 'White' }
             ];
-            
-            let content = '<div style="max-width: 900px; margin: 0 auto;">';
             
             // 发色
             content += '<div style="margin-bottom: 50px;"><h3 style="color: #ed7f8c; margin-bottom: 25px; text-align: center; font-size: 20px;">Hair Color</h3>';
@@ -1795,8 +1978,11 @@
             hairColors.forEach(color => {
                 const selected = characterData.hairColor === color.id ? 'selected' : '';
                 content += `
-                    <div class="color-option ${selected}" style="background-color: ${color.color}" 
-                         onclick="selectHairColor('${color.id}')" title="${color.name}">
+                    <div class="color-option-wrapper" onclick="selectHairColor('${color.id}')">
+                        <div class="color-option ${selected}" style="background-image: url('${color.image}'); background-size: cover; background-position: center;" 
+                             title="${color.name}">
+                        </div>
+                        <div class="color-option-label">${color.name}</div>
                     </div>
                 `;
             });
@@ -1804,12 +1990,15 @@
             
             // 眼色
             content += '<div><h3 style="color: #ed7f8c; margin-bottom: 25px; text-align: center; font-size: 20px;">Eye Color</h3>';
-            content += '<div class="color-selector" style="margin: 0 auto;">';
+            content += '<div class="color-selector" style="margin: 0 auto; grid-template-columns: repeat(3, 1fr); max-width: 300px;">';
             eyeColors.forEach(color => {
                 const selected = characterData.eyeColor === color.id ? 'selected' : '';
                 content += `
-                    <div class="color-option ${selected}" style="background-color: ${color.color}" 
-                         onclick="selectEyeColor('${color.id}')" title="${color.name}">
+                    <div class="color-option-wrapper" onclick="selectEyeColor('${color.id}')">
+                        <div class="color-option ${selected}" style="background-image: url('${color.image}'); background-size: cover; background-position: center;" 
+                             title="${color.name}">
+                        </div>
+                        <div class="color-option-label">${color.name}</div>
                     </div>
                 `;
             });
@@ -1822,14 +2011,14 @@
         // 获取身体类型选择内容
         function getBodyContent() {
             const bodyTypes = [
-                { id: 'petite', icon: '👩', title: 'Petite', description: 'Small and delicate build' },
-                { id: 'slim', icon: '🧘‍♀️', title: 'Slim', description: 'Lean and athletic figure' },
-                { id: 'average', icon: '👤', title: 'Average', description: 'Balanced proportions' },
-                { id: 'curvy', icon: '💃', title: 'Curvy', description: 'Full hourglass figure' },
-                { id: 'voluptuous', icon: '🌹', title: 'Voluptuous', description: 'Generous curves' },
-                { id: 'athletic', icon: '🏃‍♀️', title: 'Athletic', description: 'Toned and muscular' },
-                { id: 'plus_size', icon: '💕', title: 'Plus Size', description: 'Fuller figure' },
-                { id: 'tall_slim', icon: '🗽', title: 'Tall & Slim', description: 'Tall with lean build' }
+                { id: 'petite', image: 'assets/body types/petite.jpg', title: 'Petite', description: 'Small and delicate build' },
+                { id: 'slim', image: 'assets/body types/slim.jpg', title: 'Slim', description: 'Lean and athletic figure' },
+                { id: 'average', image: 'assets/body types/average.jpg', title: 'Average', description: 'Balanced proportions' },
+                { id: 'curvy', image: 'assets/body types/curvy.jpg', title: 'Curvy', description: 'Full hourglass figure' },
+                { id: 'voluptuous', image: 'assets/body types/voluptuous.jpg', title: 'Voluptuous', description: 'Generous curves' },
+                { id: 'athletic', image: 'assets/body types/athletic.jpg', title: 'Athletic', description: 'Toned and muscular' },
+                { id: 'plus_size', image: 'assets/body types/plus_size.jpg', title: 'Plus Size', description: 'Fuller figure' },
+                { id: 'tall_slim', image: 'assets/body types/tall_slim.jpg', title: 'Tall & Slim', description: 'Tall with lean build' }
             ];
             
             let content = '<div class="options-grid icon-grid">';
@@ -1837,7 +2026,7 @@
                 const selected = characterData.bodyType === bodyType.id ? 'selected' : '';
                 content += `
                     <div class="option-card icon-card ${selected}" onclick="selectBodyType('${bodyType.id}')">
-                        <div class="option-icon">${bodyType.icon}</div>
+                        <div class="option-image" style="background-image: url('${bodyType.image}'); background-size: cover; background-position: center;"></div>
                         <div class="option-title">${bodyType.title}</div>
                         <div class="option-description">${bodyType.description}</div>
                     </div>
@@ -1917,30 +2106,33 @@
                 const mappings = {
                     style: { realistic: 'Realistic', anime: 'Anime' },
                     ethnicity: { asian: 'Asian', caucasian: 'Caucasian', latina: 'Latina', african: 'African', middle_eastern: 'Middle Eastern', mixed: 'Mixed' },
+                    hairStyle: {
+                        shortHair: 'Short Hair',
+                        chicMediumLengthHair: 'Chic Medium Length Hair',
+                        sleekBob: 'Sleek Bob',
+                        sleekHair: 'Sleek Hair',
+                        straightSideBangs: 'Straight Side Bangs',
+                        voluminousCurls: 'Voluminous Curls',
+                        naturalWaves: 'Natural Waves',
+                        stackedBob: 'Stacked Bob'
+                    },
                     hairColor: { 
-                        black: 'Black', 
-                        dark_brown: 'Dark Brown', 
-                        brown: 'Brown', 
-                        light_brown: 'Light Brown', 
-                        dirty_blonde: 'Dirty Blonde', 
-                        blonde: 'Blonde', 
+                        jet_black: 'Jet Black', 
+                        natural_dark_brown: 'Natural Dark Brown', 
+                        soft_mahogany_brown: 'Soft Mahogany Brown', 
+                        golden_blonde: 'Golden Blonde', 
+                        platinum_blonde: 'Platinum Blonde', 
                         strawberry_blonde: 'Strawberry Blonde', 
-                        red: 'Auburn Red', 
-                        light_red: 'Light Red', 
-                        gray: 'Gray', 
-                        silver: 'Silver', 
-                        white: 'White' 
+                        red_mahogany: 'Red Mahogany',
+                        rose_red: 'Rose Red'
                     },
                     eyeColor: { 
-                        dark_brown: 'Dark Brown', 
+                        black: 'Black', 
                         brown: 'Brown', 
-                        hazel: 'Hazel', 
-                        amber: 'Amber', 
-                        green: 'Green', 
                         blue: 'Blue', 
-                        light_blue: 'Light Blue', 
-                        gray: 'Gray', 
-                        violet: 'Violet' 
+                        green: 'Green', 
+                        purple: 'Purple', 
+                        white: 'White'
                     },
                     bodyType: { 
                         petite: 'Petite', 
@@ -1975,13 +2167,19 @@
                             <span class="summary-value">${characterData.age}</span>
                         </div>
                         <div class="summary-item">
-                            <span class="summary-label">Background:</span>
-                            <span class="summary-value">${getDisplayValue('background', characterData.background)}</span>
+                            <span class="summary-label">Character Name:</span>
+                            <input type="text" class="age-input" id="characterName" value="${characterData.name}" 
+                                   placeholder="Enter character name..." onchange="updateCharacterName()" 
+                                   style="width: 120px; height: 30px; font-size: 14px; margin: 0;">
                         </div>
                     </div>
                     
                     <div class="summary-section">
                         <div class="summary-title">Appearance</div>
+                        <div class="summary-item">
+                            <span class="summary-label">Hair Style:</span>
+                            <span class="summary-value">${getDisplayValue('hairStyle', characterData.hairStyle)}</span>
+                        </div>
                         <div class="summary-item">
                             <span class="summary-label">Hair Color:</span>
                             <span class="summary-value">${getDisplayValue('hairColor', characterData.hairColor)}</span>
@@ -1998,45 +2196,17 @@
                             <span class="summary-label">Outfit:</span>
                             <span class="summary-value">${getDisplayValue('outfit', characterData.outfit)}</span>
                         </div>
-                    </div>
-                    
-                    <div class="summary-section">
-                        <div class="summary-title">Selection Status</div>
-                        <div class="summary-item">
-                            <span class="summary-label">Style:</span>
-                            <span class="summary-value" style="color: ${characterData.style ? '#4CAF50' : '#ed7f8c'}">${characterData.style ? '✓ Selected' : '✗ Required'}</span>
-                        </div>
-                        <div class="summary-item">
-                            <span class="summary-label">Ethnicity:</span>
-                            <span class="summary-value" style="color: ${characterData.ethnicity ? '#4CAF50' : '#ed7f8c'}">${characterData.ethnicity ? '✓ Selected' : '✗ Required'}</span>
-                        </div>
-                        <div class="summary-item">
-                            <span class="summary-label">Hair Color:</span>
-                            <span class="summary-value" style="color: ${characterData.hairColor ? '#4CAF50' : '#999'}">${characterData.hairColor ? '✓ Selected' : 'Optional'}</span>
-                        </div>
-                        <div class="summary-item">
-                            <span class="summary-label">Eye Color:</span>
-                            <span class="summary-value" style="color: ${characterData.eyeColor ? '#4CAF50' : '#999'}">${characterData.eyeColor ? '✓ Selected' : 'Optional'}</span>
-                        </div>
-                        <div class="summary-item">
-                            <span class="summary-label">Body Type:</span>
-                            <span class="summary-value" style="color: ${characterData.bodyType ? '#4CAF50' : '#ed7f8c'}">${characterData.bodyType ? '✓ Selected' : '✗ Required'}</span>
-                        </div>
-                        <div class="summary-item">
-                            <span class="summary-label">Outfit:</span>
-                            <span class="summary-value" style="color: ${characterData.outfit ? '#4CAF50' : '#ed7f8c'}">${characterData.outfit ? '✓ Selected' : '✗ Required'}</span>
-                        </div>
                         <div class="summary-item">
                             <span class="summary-label">Background:</span>
-                            <span class="summary-value" style="color: ${characterData.background ? '#4CAF50' : '#ed7f8c'}">${characterData.background ? '✓ Selected' : '✗ Required'}</span>
+                            <span class="summary-value">${getDisplayValue('background', characterData.background)}</span>
                         </div>
                     </div>
                     
-                    <div class="summary-section">
-                        <div class="summary-title">Character Name</div>
-                        <input type="text" class="age-input" id="characterName" value="${characterData.name}" 
-                               placeholder="Enter character name..." onchange="updateCharacterName()" 
-                               style="width: 100%; margin-top: 10px;">
+
+                    
+                    <div class="summary-section" style="grid-column: 1 / -1;">
+                        <div class="summary-title">Image Generation Prompt</div>
+                        <textarea id="promptTextarea" style="width: 100%; min-height: 80px; resize: vertical; font-size: 14px; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #232323; color: #fff; margin-top: 10px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;" placeholder="Prompt for image generation..."></textarea>
                     </div>
                 </div>
                 
@@ -2062,20 +2232,34 @@
 
         function selectHairColor(color) {
             characterData.hairColor = color;
-            // 只移除发色选择器中的选中状态
-            const hairColorContainer = event.target.closest('.color-selector');
+            
+            // 找到当前点击的包装器
+            const wrapper = event.target.closest('.color-option-wrapper');
+            
+            // 移除所有选中状态
+            const hairColorContainer = wrapper.closest('.color-selector');
             hairColorContainer.querySelectorAll('.color-option').forEach(option => option.classList.remove('selected'));
-            event.target.classList.add('selected');
+            
+            // 为当前点击的包装器中的color-option添加选中状态
+            const colorOption = wrapper.querySelector('.color-option');
+            colorOption.classList.add('selected');
         }
 
 
 
         function selectEyeColor(color) {
             characterData.eyeColor = color;
-            // 只移除眼色选择器中的选中状态
-            const eyeColorContainer = event.target.closest('.color-selector');
+            
+            // 找到当前点击的包装器
+            const wrapper = event.target.closest('.color-option-wrapper');
+            
+            // 移除所有选中状态
+            const eyeColorContainer = wrapper.closest('.color-selector');
             eyeColorContainer.querySelectorAll('.color-option').forEach(option => option.classList.remove('selected'));
-            event.target.classList.add('selected');
+            
+            // 为当前点击的包装器中的color-option添加选中状态
+            const colorOption = wrapper.querySelector('.color-option');
+            colorOption.classList.add('selected');
         }
 
         function selectOutfit(outfit) {
@@ -2161,8 +2345,8 @@
             if (!characterData.bodyType) characterData.bodyType = 'petite';
             if (!characterData.outfit) characterData.outfit = 'casual';
             if (!characterData.background) characterData.background = 'home';
-            if (!characterData.hairColor) characterData.hairColor = 'black';
-            if (!characterData.eyeColor) characterData.eyeColor = 'dark_brown';
+            if (!characterData.hairColor) characterData.hairColor = 'jet_black';
+            if (!characterData.eyeColor) characterData.eyeColor = 'black';
             
             // 开始加载状态
             startGenerating();
@@ -2320,8 +2504,17 @@
         function fillCharacterDetails() {
             const styleMap = { realistic: 'Realistic', anime: 'Anime' };
             const ethnicityMap = { asian: 'Asian', caucasian: 'Caucasian', african: 'African', latina: 'Latina', middle_eastern: 'Middle Eastern', mixed: 'Mixed' };
-            const hairColorMap = { black: 'Black', brown: 'Brown', blonde: 'Blonde', red: 'Red', gray: 'Gray', white: 'White' };
-            const eyeColorMap = { dark_brown: 'Dark Brown', light_brown: 'Light Brown', blue: 'Blue', green: 'Green', gray: 'Gray', hazel: 'Hazel' };
+            const hairColorMap = { 
+                jet_black: 'Jet Black', 
+                natural_dark_brown: 'Natural Dark Brown', 
+                soft_mahogany_brown: 'Soft Mahogany Brown', 
+                golden_blonde: 'Golden Blonde', 
+                platinum_blonde: 'Platinum Blonde', 
+                strawberry_blonde: 'Strawberry Blonde', 
+                red_mahogany: 'Red Mahogany',
+                rose_red: 'Rose Red'
+            };
+            const eyeColorMap = { black: 'Black', brown: 'Brown', blue: 'Blue', green: 'Green', purple: 'Purple', white: 'White' };
             const bodyTypeMap = { petite: 'Petite', slim: 'Slim', athletic: 'Athletic', curvy: 'Curvy', plus_size: 'Plus Size' };
             const outfitMap = { casual: 'Casual', elegant: 'Elegant', business: 'Business', sporty: 'Sporty', sexy: 'Sexy', vintage: 'Vintage', gothic: 'Gothic', cute: 'Cute', punk: 'Punk', bohemian: 'Bohemian', streetwear: 'Streetwear', loungewear: 'Loungewear' };
             const backgroundMap = { beach: 'Beach', city: 'City', forest: 'Forest', office: 'Office', home: 'Home', cafe: 'Cafe', gym: 'Gym', school: 'School', party: 'Party', garden: 'Garden', mountain: 'Mountain', nightclub: 'Nightclub' };
@@ -2378,6 +2571,77 @@
             window.location.href = `generate.html?character=${characterParams}&mode=video`;
         }
 
+        // 根据风格获取角色职业
+        function getRoleFromStyle(style) {
+            const roleMap = {
+                'realistic': 'Professional',
+                'anime': 'Student',
+                'cartoon': 'Artist',
+                'fantasy': 'Adventurer'
+            };
+            return roleMap[style] || 'Professional';
+        }
+
+        // 根据角色数据生成标签
+        function getTagsFromData(data) {
+            const tags = [];
+            
+            // 根据风格添加标签
+            if (data.style === 'realistic') tags.push('Professional');
+            if (data.style === 'anime') tags.push('Cute');
+            if (data.style === 'cartoon') tags.push('Creative');
+            if (data.style === 'fantasy') tags.push('Mysterious');
+            
+            // 根据体型添加标签
+            if (data.bodyType === 'petite') tags.push('Petite');
+            if (data.bodyType === 'curvy') tags.push('Curvy');
+            if (data.bodyType === 'athletic') tags.push('Athletic');
+            
+            // 根据服装添加标签
+            if (data.outfit === 'casual') tags.push('Casual');
+            if (data.outfit === 'elegant') tags.push('Elegant');
+            if (data.outfit === 'sexy') tags.push('Seductive');
+            
+            return tags.join(',');
+        }
+
+        // 根据背景获取描述
+        function getBackgroundDescription(background) {
+            const backgroundMap = {
+                'home': 'staying cozy at home',
+                'office': 'working in my office',
+                'gym': 'working out at the gym',
+                'beach': 'enjoying the beach',
+                'cafe': 'hanging out at cafes',
+                'park': 'walking in the park'
+            };
+            return backgroundMap[background] || 'exploring new places';
+        }
+
+        // 与角色聊天 - 暂时隐藏，后续开发
+        /*
+        function chatWithCharacter() {
+            // 创建角色数据，包含当前生成的图片
+            const characterDataWithImage = {
+                ...characterData,
+                image: document.querySelector('.result-image img')?.src || 'assets/pic_1.jpeg' // 使用生成的图片或默认图片
+            };
+            
+            // 跳转到聊天页面，并传递角色数据
+            const params = new URLSearchParams({
+                name: characterDataWithImage.name,
+                image: characterDataWithImage.image,
+                age: characterDataWithImage.age + ' years old',
+                role: getRoleFromStyle(characterDataWithImage.style),
+                tags: getTagsFromData(characterDataWithImage),
+                status: 'Online',
+                greeting: `Hello! I'm ${characterDataWithImage.name}. I'm so excited to meet you! I'm a ${getRoleFromStyle(characterDataWithImage.style)} and I love ${getBackgroundDescription(characterDataWithImage.background)}. What would you like to chat about?`
+            });
+            
+            window.location.href = `chat.html?${params.toString()}`;
+        }
+        */
+
         // 创建另一个角色
         function createAnother() {
             closeResult();
@@ -2386,11 +2650,12 @@
                 style: 'realistic',           // 默认选择第一项：Realistic
                 ethnicity: 'asian',           // 默认选择第一项：Asian
                 age: 22,
-                hairColor: 'black',           // 默认选择第一项：Black
-                eyeColor: 'dark_brown',       // 默认选择第一项：Dark Brown
+                hairStyle: 'chicMediumLengthHair', // 新增：默认发型
+                hairColor: 'jet_black',           // 默认选择第一项：Jet Black
+                eyeColor: 'black',       // 默认选择第一项：Black
                 bodyType: 'petite',           // 默认选择第一项：Petite
                 outfit: 'casual',             // 默认选择第一项：Casual
-                background: 'home',           // 默认选择第一项：Home
+                background: 'beach',           // 默认选择第一项：Beach
                 name: 'Luna'                  // 默认角色名
             };
             // 回到第一步
@@ -2427,16 +2692,19 @@
         // 导航点击事件处理函数
         function handleNavigation(navType) {
             if (navType === 'explore') {
-                    window.location.href = './index.html';
+                window.location.href = './index.html';
+            // Chat功能暂时隐藏，后续开发
+            /*
             } else if (navType === 'chat') {
-                alert('Chat feature is temporarily unavailable. Please try other features!');
+                window.location.href = './chat.html';
+            */
             } else if (navType === 'dashboard') {
-                    window.location.href = './dashboard.html';
+                window.location.href = './dashboard.html';
             } else if (navType === 'create') {
-                    // 当前页面
-                    return;
+                // 当前页面
+                return;
             } else if (navType === 'generate') {
-                    window.location.href = './generate.html';
+                window.location.href = './generate.html';
             }
         }
 
@@ -2465,6 +2733,50 @@
                 handleNavigation(navType);
             });
         });
+
+        // 新增：发型选择函数
+        function selectHairStyle(styleId) {
+            characterData.hairStyle = styleId;
+            // 移除所有发型卡片的选中状态
+            document.querySelectorAll('.options-grid.style-grid .option-card').forEach(card => card.classList.remove('selected'));
+            // 为当前点击的卡片添加选中状态
+            event.target.closest('.option-card').classList.add('selected');
+        }
+
+        function generatePromptFromSelections() {
+            // 获取映射
+            const getDisplay = (key, value) => {
+                const mappings = {
+                    style: { realistic: 'realistic', anime: 'anime style' },
+                    ethnicity: { asian: 'East Asian', caucasian: 'Caucasian', latina: 'Latina', african: 'African', middle_eastern: 'Middle Eastern', mixed: 'Mixed ethnicity' },
+                    hairStyle: {
+                        shortHair: 'short hair', chicMediumLengthHair: 'chic medium length hair', sleekBob: 'sleek bob', sleekHair: 'sleek hair', straightSideBangs: 'straight side bangs', voluminousCurls: 'voluminous curls', naturalWaves: 'natural waves', stackedBob: 'stacked bob'
+                    },
+                    hairColor: {
+                        jet_black: 'jet black hair', natural_dark_brown: 'natural dark brown hair', soft_mahogany_brown: 'soft mahogany brown hair', golden_blonde: 'golden blonde hair', platinum_blonde: 'platinum blonde hair', strawberry_blonde: 'strawberry blonde hair', red_mahogany: 'red mahogany hair', rose_red: 'rose red hair'
+                    },
+                    eyeColor: {
+                        black: 'black eyes', brown: 'brown eyes', blue: 'blue eyes', green: 'green eyes', purple: 'purple eyes', white: 'white eyes'
+                    },
+                    bodyType: { petite: 'petite', slim: 'slim', average: 'average', curvy: 'curvy', voluptuous: 'voluptuous', athletic: 'athletic', plus_size: 'plus size', tall_slim: 'tall and slim' },
+                    outfit: { casual: 'casual outfit', elegant: 'elegant dress', business: 'business suit', sporty: 'sporty wear', sexy: 'sexy outfit', vintage: 'vintage style', gothic: 'gothic style', cute: 'cute clothes', punk: 'punk style', bohemian: 'bohemian style', streetwear: 'streetwear', loungewear: 'loungewear' },
+                    background: { beach: 'on the beach', city: 'in the city', forest: 'in the forest', office: 'in an office', home: 'at home', cafe: 'in a cafe', gym: 'in a gym', school: 'at school', party: 'at a party', garden: 'in a garden', mountain: 'in the mountains', nightclub: 'in a nightclub' }
+                };
+                return mappings[key] && mappings[key][value] ? mappings[key][value] : value;
+            };
+            
+            // 构建自然语言描述
+            let prompt = `A beautiful ${getDisplay('ethnicity', characterData.ethnicity)} young woman, ${characterData.age} years old, with a ${getDisplay('bodyType', characterData.bodyType)} figure. She has ${getDisplay('hairStyle', characterData.hairStyle)} in ${getDisplay('hairColor', characterData.hairColor)}, and ${getDisplay('eyeColor', characterData.eyeColor)}. She is wearing ${getDisplay('outfit', characterData.outfit)} and is ${getDisplay('background', characterData.background)}. The image is in ${getDisplay('style', characterData.style)} style.`;
+            
+            return prompt;
+        }
+
+        function fillPromptTextarea() {
+            const textarea = document.getElementById('promptTextarea');
+            if (textarea) textarea.value = generatePromptFromSelections();
+        }
+
+
     </script>
 </body>
 </html> 

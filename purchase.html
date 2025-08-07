@@ -487,10 +487,12 @@
                     <div class="icon">🔍</div>
                     <div class="text">Explore</div>
                 </div>
-                <div class="nav-item" style="display: none;">
+                <!-- Chat功能暂时隐藏，后续开发
+                <div class="nav-item">
                     <div class="icon">💬</div>
                     <div class="text">Chat</div>
                 </div>
+                -->
                 <div class="nav-item">
                     <div class="icon">✨</div>
                     <div class="text">Create</div>
@@ -619,6 +621,31 @@
                         Select a Package
                     </button>
 
+                    <!-- Stripe测试购买按钮 -->
+                    <div style="text-align: center; margin: 20px 0;">
+                        <p style="color: #999; font-size: 14px; margin-bottom: 10px;">🔧 测试购买按钮</p>
+                        <button 
+                            id="stripeTestBtn" 
+                            onclick="handleStripeTestPurchase()"
+                            style="
+                                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                                color: white;
+                                border: none;
+                                padding: 12px 24px;
+                                border-radius: 8px;
+                                font-size: 16px;
+                                font-weight: 600;
+                                cursor: pointer;
+                                transition: all 0.3s ease;
+                                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+                            "
+                            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(102, 126, 234, 0.4)'"
+                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(102, 126, 234, 0.3)'"
+                        >
+                            🛒 Stripe测试购买
+                        </button>
+                    </div>
+
                     <div class="payment-methods">
                         <div class="payment-title">Secure Payment Methods</div>
                         <div class="payment-options">
@@ -637,14 +664,37 @@
         let selectedPackage = 'popular';
         
         const packages = {
-            starter: { gems: 100, price: 4.99, bonus: 0 },
-            popular: { gems: 250, price: 9.99, bonus: 50 },
-            premium: { gems: 500, price: 19.99, bonus: 100 },
-            ultimate: { gems: 1000, price: 39.99, bonus: 200 }
+            starter: { 
+                gems: 100, 
+                price: 4.99, 
+                bonus: 0, 
+                paymentLink: 'https://buy.stripe.com/test_link_starter' // 需要从Stripe Dashboard创建
+            },
+            popular: { 
+                gems: 250, 
+                price: 9.99, 
+                bonus: 50, 
+                paymentLink: 'https://buy.stripe.com/test_link_popular' // 需要从Stripe Dashboard创建
+            },
+            premium: { 
+                gems: 500, 
+                price: 19.99, 
+                bonus: 100, 
+                paymentLink: 'https://buy.stripe.com/test_link_premium' // 需要从Stripe Dashboard创建
+            },
+            ultimate: { 
+                gems: 1000, 
+                price: 39.99, 
+                bonus: 200, 
+                paymentLink: 'https://buy.stripe.com/test_link_ultimate' // 需要从Stripe Dashboard创建
+            }
         };
 
         // 页面加载时初始化
         document.addEventListener('DOMContentLoaded', function() {
+            // 更新用户信息显示
+            updateUserInfo();
+            
             // 默认选中250 Gems包
             const pkg = packages['popular'];
             const totalGems = pkg.gems + pkg.bonus;
@@ -675,17 +725,167 @@
                 return;
             }
             
+            // 检查用户登录状态
+            const userEmail = getUserEmail();
+            if (!userEmail) {
+                // 未登录状态，跳转到登录页面
+                alert('Please login first to continue with your purchase.');
+                window.location.href = './auth.html';
+                return;
+            }
+            
             const pkg = packages[selectedPackage];
             const totalGems = pkg.gems + pkg.bonus;
             
-            // 这里可以集成真实的支付处理
+            // 显示支付确认对话框
             if (confirm(`Confirm purchase of ${totalGems} gems for $${pkg.price}?`)) {
-                // 模拟支付成功
-                alert('Payment successful! Your gems have been added to your account.');
+                // 构建带邮箱参数的支付链接
+                const paymentLink = buildPaymentLink(pkg.paymentLink, userEmail);
                 
-                // 可以在这里跳转回主页面或刷新gem余额
-                window.location.href = './index.html';
+                if (paymentLink) {
+                    // 重定向到Stripe支付页面
+                    window.open(paymentLink, '_blank');
+                }
             }
+        }
+
+        // 获取用户邮箱
+        function getUserEmail() {
+            // 从localStorage获取用户数据
+            const userData = localStorage.getItem('userData');
+            console.log('userData from localStorage:', userData);
+            
+            if (userData) {
+                try {
+                    const user = JSON.parse(userData);
+                    console.log('Parsed user data:', user);
+                    return user.email || null;
+                } catch (e) {
+                    console.error('Error parsing userData:', e);
+                }
+            }
+            
+            // 从localStorage获取用户邮箱（兼容旧版本）
+            const userEmail = localStorage.getItem('userEmail');
+            if (userEmail) {
+                return userEmail;
+            }
+            
+            // 从sessionStorage获取用户邮箱
+            const sessionEmail = sessionStorage.getItem('userEmail');
+            if (sessionEmail) {
+                return sessionEmail;
+            }
+            
+            // 从cookie获取用户邮箱
+            const cookies = document.cookie.split(';');
+            for (let cookie of cookies) {
+                const [name, value] = cookie.trim().split('=');
+                if (name === 'userEmail' && value) {
+                    return decodeURIComponent(value);
+                }
+            }
+            
+            console.log('No user email found');
+            return null;
+        }
+
+        // 获取用户信息
+        function getUserInfo() {
+            // 从localStorage获取用户数据
+            const userData = localStorage.getItem('userData');
+            if (userData) {
+                try {
+                    const user = JSON.parse(userData);
+                    return {
+                        name: user.name || 'User',
+                        email: user.email || '',
+                        membershipType: user.membershipType || 'Free Member',
+                        gemBalance: user.gemBalance || '50'
+                    };
+                } catch (e) {
+                    console.error('Error parsing userData:', e);
+                }
+            }
+            
+            // 默认用户信息
+            return {
+                name: 'User',
+                email: '',
+                membershipType: 'Free Member',
+                gemBalance: '50'
+            };
+        }
+
+        // 更新用户信息显示
+        function updateUserInfo() {
+            const userInfo = getUserInfo();
+            console.log('Updating user info:', userInfo);
+            
+            // 更新用户名
+            const userNameElement = document.querySelector('.user-details h4');
+            if (userNameElement) {
+                userNameElement.textContent = userInfo.name;
+                console.log('Updated username to:', userInfo.name);
+            }
+            
+            // 更新会员类型
+            const membershipElement = document.querySelector('.user-details p');
+            if (membershipElement) {
+                membershipElement.textContent = userInfo.membershipType;
+                console.log('Updated membership to:', userInfo.membershipType);
+            }
+            
+            // 更新宝石余额
+            const gemCountElement = document.querySelector('.gem-count');
+            if (gemCountElement) {
+                gemCountElement.textContent = userInfo.gemBalance;
+                console.log('Updated gem balance to:', userInfo.gemBalance);
+            }
+        }
+
+        // 构建带邮箱参数的支付链接
+        function buildPaymentLink(baseLink, email) {
+            if (!baseLink || baseLink.includes('test_link_')) {
+                // 如果没有配置真实支付链接，使用演示模式
+                alert('Demo: Payment successful! Your gems have been added to your account.');
+                window.location.href = './index.html';
+                return null;
+            }
+            
+            // 构建带邮箱参数的URL
+            const url = new URL(baseLink);
+            url.searchParams.set('locked_prefilled_email', email);
+            
+            return url.toString();
+        }
+
+        // 处理Stripe测试购买按钮
+        function handleStripeTestPurchase() {
+            // 检查用户登录状态
+            const userEmail = getUserEmail();
+            if (!userEmail) {
+                // 未登录状态，跳转到登录页面
+                alert('Please login first to continue with your purchase.');
+                window.location.href = './auth.html';
+                return;
+            }
+
+            // 构建带邮箱参数的Stripe测试购买链接
+            const baseStripeLink = 'https://buy.stripe.com/test_6oUdR21QC6zb7s20aWcZa03';
+            const paymentLink = buildStripeTestLink(baseStripeLink, userEmail);
+            
+            // 打开支付页面
+            window.open(paymentLink, '_blank');
+        }
+
+        // 构建Stripe测试购买链接
+        function buildStripeTestLink(baseLink, email) {
+            // 构建带邮箱参数的URL
+            const url = new URL(baseLink);
+            url.searchParams.set('locked_prefilled_email', email);
+            
+            return url.toString();
         }
 
         // 导航功能
@@ -695,16 +895,17 @@
                 
                 if (text === 'Explore') {
                     window.location.href = './index.html';
+                // Chat功能暂时隐藏，后续开发
+                /*
                 } else if (text === 'Chat') {
-                    alert('Chat feature is temporarily unavailable. Please try other features!');
+                    window.location.href = './chat.html';
+                */
                 } else if (text === 'Create') {
                     window.location.href = './create.html';
                 } else if (text === 'Dashboard') {
                     window.location.href = './dashboard.html';
                 } else if (text === 'Generate') {
                     window.location.href = './generate.html';
-                } else {
-                    alert(`Navigate to ${text} page\n(功能开发中)`);
                 }
             });
         });
